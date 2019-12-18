@@ -6,7 +6,6 @@
 :END:
 ---------------------------------------------------------------------
 Game Play Analysis I
----------------------------------------------------------------------
 
 Table: Activity
 #+BEGIN_EXAMPLE
@@ -52,6 +51,7 @@ Github: [[https://github.com/dennyzhang/code.dennyzhang.com/tree/master/problems
 
 Credits To: [[https://leetcode.com/problems/game-play-analysis-i/description/][leetcode.com]]
 
+Leave me comments, if you have better ways to solve.
 ---------------------------------------------------------------------
 - Solution:
 
