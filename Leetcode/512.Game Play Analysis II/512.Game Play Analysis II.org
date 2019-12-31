@@ -1,0 +1,94 @@
+Skip to content
+Search or jump to…
+
+Pull requests
+Issues
+Marketplace
+Explore
+ 
+@LindaYHuang 
+0
+017LindaYHuang/code.dennyzhang.com
+forked from dennyzhang/code.dennyzhang.com
+ Code Pull requests 0 Actions Projects 0 Wiki Security Insights Settings
+code.dennyzhang.com
+/
+problems
+/
+game-play-analysis-ii
+/
+README.org
+ 
+
+Table: Activity
+24
+#+BEGIN_EXAMPLE
+25
++--------------+---------+
+26
+| Column Name  | Type    |
+27
++--------------+---------+
+28
+| player_id    | int     |
+29
+| device_id    | int     |
+30
+| event_date   | date    |
+31
+| games_played | int     |
+32
++--------------+---------+
+33
+(player_id, event_date) is the primary key of this table.
+34
+This table shows the activity of players of some game.
+35
+Each row is a record of a player who logged in and played a number of games (possibly 0) before logging out on some day using some device.
+36
+#+END_EXAMPLE
+37
+ 
+38
+Write a SQL query that reports the device that is first logged in for each player.
+39
+​
+40
+The query result format is in the following example:
+41
+#+BEGIN_EXAMPLE
+42
+Activity table:
+43
++-----------+-----------+------------+--------------+
+44
+| player_id | device_id | event_date | games_played |
+45
++-----------+-----------+------------+--------------+
+46
+| 1         | 2         | 2016-03-01 | 5            |
+47
+| 1         | 2         | 2016-05-02 | 6            |
+48
+| 2         | 3         | 2017-06-25 | 1            |
+@LindaYHuang
+Commit changes
+Commit summary
+Update README.org
+Optional extended description
+Add an optional extended description…
+ Commit directly to the master branch.
+ Create a new branch for this commit and start a pull request. Learn more about pull requests.
+ 
+© 2019 GitHub, Inc.
+Terms
+Privacy
+Security
+Status
+Help
+Contact GitHub
+Pricing
+API
+Training
+Blog
+About
