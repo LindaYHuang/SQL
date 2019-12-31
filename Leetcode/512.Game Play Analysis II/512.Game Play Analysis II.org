@@ -38,9 +38,6 @@ Result table:
 +-----------+-----------+
 #+END_EXAMPLE
 
-Github: [[https://github.com/dennyzhang/code.dennyzhang.com/tree/master/problems/game-play-analysis-ii][code.dennyzhang.com]]
-
-Credits To: [[https://leetcode.com/problems/game-play-analysis-ii/description/][leetcode.com]]
 
 ---------------------------------------------------------------------
 - Solution:
