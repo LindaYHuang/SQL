@@ -39,7 +39,6 @@ Only the player with id 1 logged back in after the first day he had logged in so
 
 ---------------------------------------------------------------------
 - Solution 1:
-
 #+BEGIN_SRC sql
 select round(sum(case when t1.event_date = t2.first_event+1 then 1 else 0 end)/count(distinct t1.player_id), 2) as fraction
 from Activity as t1 inner join
@@ -49,8 +48,7 @@ from Activity as t1 inner join
 on t1.player_id = t2.player_id
 #+END_SRC
 
-- Solution 1:
-
+- Solution 2:
 #+BEGIN_SRC sql
 select round(count(distinct t2.player_id)/count(distinct t1.player_id), 2) as fraction
 from Activity as t1 , 
