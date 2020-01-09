@@ -52,14 +52,14 @@ on t1.player_id = t2.player_id
 #+BEGIN_SRC sql
 SELECT
     ROUND(
-        COUNT(b.event_date)/ COUNT(a.player_id),
+        COUNT(b.event_date)/ COUNT(distinct a.player_id),
         2) fraction
 FROM
     Activity a LEFT JOIN Activity b ON 
     b.player_id = a.player_id AND
     DATEDIFF(b.event_date,a.event_date) = 1 #b作a的次日
 WHERE #first day
-    (a.player_id,a.event_date) IN (SELECT player_id, MIN(event_date)
+    (a.event_date) IN (SELECT player_id, MIN(event_date) 
                                    FROM Activity
                                    GROUP BY player_id)
 #+END_SRC
