@@ -50,10 +50,18 @@ on t1.player_id = t2.player_id
 
 - Solution 2:
 #+BEGIN_SRC sql
-select round(count(distinct t2.player_id)/count(distinct t1.player_id), 2) as fraction
-from Activity as t1 , 
-    (select player_id, event_date
-    from Activity a1, Activity as a2
-    group by player_id
-    WHERE a1.player_id = a2.player_id and a2.event_date = a1.event_date+1) as t2
+SELECT
+    ROUND(
+        COUNT(b.event_date)/ COUNT(a.player_id),
+        2) fraction
+FROM
+    Activity a LEFT JOIN Activity b ON 
+    b.player_id = a.player_id AND
+    DATEDIFF(b.event_date,a.event_date) = 1 #b作a的次日
+WHERE #first day
+    (a.player_id,a.event_date) IN (SELECT player_id, MIN(event_date)
+                                   FROM Activity
+                                   GROUP BY player_id)
 #+END_SRC
+
+
