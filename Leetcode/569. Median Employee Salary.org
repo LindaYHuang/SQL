@@ -39,7 +39,7 @@ Write a SQL query to find the median salary of each company. Bonus points if you
 
 
 #+BEGIN_SRC python
-
+#MySQL doesn't yet offer a built-in function to calculate the median value of a column. 
 select t1.Id as Id, t1.Company, t1.Salary
 from Employee as t1 inner join Employee as t2
 on t1.Company = t2.Company
