@@ -31,8 +31,7 @@ No one would report to himself.
 select Name
 from Employee
 where id in
-   (select ManagerId
-    from Employee
+   (select ManagerId from Employee
     group by ManagerId
     having count(1) >= 5)
 
