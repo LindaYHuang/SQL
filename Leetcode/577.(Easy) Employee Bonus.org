@@ -41,5 +41,5 @@ Example ouput:
 select name, bonus
 from Employee left join Bonus
 on Employee.empId = Bonus.empId
-where bonus<1000 or bonus is null;
+where Bonus.bonus<1000 or Bonus.bonus is null;
 #+END_SRC
