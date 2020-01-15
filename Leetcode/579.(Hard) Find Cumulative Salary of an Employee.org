@@ -1,0 +1,14 @@
+-Solution 1
+
+SELECT e1.Id, e1.Month, (IFNULL(e1.Salary,0)+IFNULL(e2.Salary,0)+IFNULL(e3.Salary,0)) as Salary
+FROM (SELECT Id, Max(month) as m 
+      FROM Employee  
+      GROUP BY Id
+      Having count(*) >1 ) as t
+LEFT JOIN Employee e1 on (t.Id = e1.Id  AND t.m > e1.Month)
+LEFT JOIN Employee e2 on (e2.Id = e1.Id AND e2.Month = e1.Month-1)
+LEFT JOIN Employee e3 on (e3.Id = e1.Id AND e3.Month = e1.Month-2)
+
+order by e1.Id ASC, e1.Month Desc
+
+
