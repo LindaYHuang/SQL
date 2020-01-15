@@ -57,7 +57,7 @@ order by t1.Company, t1.Salary, t1.Id
 
 #+BEGIN_SRC python
 #MySQL doesn't yet offer a built-in function to calculate the median value of a column. 
-#  Hint: |所有小于等于median的数字的数量 - 所有大于等于median的数字的数量 | <= 1
+#  Hint: |所有小于等于median的数字的数量 - 所有大于等于median的数字的数量 | <= medium 在数列中出现的频率
 
 select t1.Id as Id, t1.Company, t1.Salary
 from Employee as t1 left join Employee as t2
