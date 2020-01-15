@@ -36,3 +36,13 @@ output
 Notes:
 You may assume there is no tie, in other words 
 there will be at most one winning candidate.
+
+
+-Solution
+#+BEGIN_SRC python
+Select Name from Candidate
+Where ID = (SELECT CandidateId FROM Vote 
+            GROUP BY CandidateId 
+            ORDER BY count(id) Desc
+            Limit 1)
+#+END_SRC
