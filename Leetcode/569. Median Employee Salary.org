@@ -55,7 +55,7 @@ having abs(sum(CASE when t2.Salary<t1.Salary then 1                 #having 在g
 order by t1.Company, t1.Salary, t1.Id
 #+END_SRC
 
-#+BEGIN_SRC python
+#+BEGIN_SRC SQL
 #MySQL doesn't yet offer a built-in function to calculate the median value of a column. 
 #  Hint: |所有小于等于median的数字的数量 - 所有大于等于median的数字的数量 | <= medium 在数列中出现的频率
 
