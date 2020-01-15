@@ -41,7 +41,7 @@ from (
         sum(case when action='answer' then 1 else 0 end) as answer_count
     from survey_log
     group by question_id) as t
-order by （answer_count/show_count） desc
+order by （t.answer_count/t.show_count） desc
 limit 1
 #+END_SRC
 
