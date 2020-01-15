@@ -46,3 +46,22 @@ Where ID = (SELECT CandidateId FROM Vote
             ORDER BY count(id) Desc
             Limit 1)
 #+END_SRC
+
+
+-
+#+BEGIN_SRC python
+#直接连接两表，再按Candidate分组，统计投票数，取最高人。
+#有个重要的细节是Vote表中的某些CandidateId可能不在Candidate 表中。
+#因此，需要在外围过滤掉Name是NULL的行。
+select A.Name
+from(
+    select C.Name
+    from Vote as V left join 
+    Candidate as C
+     on(C.id = V.CandidateId)
+    group by V.CandidateId,C.Name
+    order by count(V.id) desc
+    limit 0,1
+) as A
+where A.Name is not null
+#+END_SRC
