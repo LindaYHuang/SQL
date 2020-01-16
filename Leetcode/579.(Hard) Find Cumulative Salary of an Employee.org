@@ -54,7 +54,7 @@ Employ '3' has two salary records except its most recent pay month '4': month '3
 | 3  | 3     | 100    |
 | 3  | 2     | 40     |
 #+END_EXAMPLE
-
+---------------------------------------------------------------------
 -Solution 1
 #+BEGIN_SRC sql
 SELECT e1.Id, e1.Month, (IFNULL(e1.Salary,0)+IFNULL(e2.Salary,0)+IFNULL(e3.Salary,0)) as Salary
