@@ -29,8 +29,6 @@ For the sample data above, the result is:
 ---------------------------------------------------------------------
 
 #+BEGIN_SRC sql
-## https://code.dennyzhang.com/find-customer-referee
-select name
-from customer
-where referee_id != '2' or referee_id is null;
+select name from customer
+where referee_id != '2' OR referee_id is null;
 #+END_SRC
