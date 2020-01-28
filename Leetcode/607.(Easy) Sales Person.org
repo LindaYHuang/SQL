@@ -69,4 +69,4 @@ WHERE sales_id NOT IN (
       FROM orders o 
       LEFT JOIN company c ON (c.com_id = o.com_id)
       WHERE c.name = 'RED') 
-#END_SRC
+#+END_SRC
