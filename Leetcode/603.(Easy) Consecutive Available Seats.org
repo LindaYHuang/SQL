@@ -1,0 +1,30 @@
+Several friends at a cinema ticket office would like to reserve consecutive available seats.
+Can you help to query all the consecutive available seats order by the seat_id using the following cinema table?
+#+BEGIN_EXAMPLE
+| seat_id | free |
+|---------|------|
+| 1       | 1    |
+| 2       | 0    |
+| 3       | 1    |
+| 4       | 1    |
+| 5       | 1    |
+#+END_EXAMPLE
+
+Your query should return the following result for the sample case above.
+#+BEGIN_EXAMPLE
+| seat_id |
+|---------|
+| 3       |
+| 4       |
+| 5       |
+#+END_EXAMPLE
+
+-SOLUTION
+#+BEGIN_SRC SQL
+# use self join for this relative complex problem.
+SELECT c1.seat_id
+FROM cinema c1 JOIN cinema c2
+WHERE c1.free = TRUE AND c2.free = TRUE
+      AND ABS(c1.seat_id - c2.seat_id) = 1 #前座和后座
+ORDER BY c1.seat_id
+#+END_SRC
