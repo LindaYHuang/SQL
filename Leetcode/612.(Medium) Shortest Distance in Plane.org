@@ -1,3 +1,20 @@
+Table point_2d holds the coordinates (x,y) of some unique points (more than two) in a plane.
+Write a query to find the shortest distance between these points rounded to 2 decimals.
+#+BEGIN_EXAMPLE
+| x  | y  |
+|----|----|
+| -1 | -1 |
+| 0  | 0  |
+| -1 | -2 |
+#+END_EXAMPLE
+
+The shortest distance is 1.00 from point (-1,-1) to (-1,2). So the output should be:
+#+BEGIN_EXAMPLE
+| shortest |
+|----------|
+| 1.00     |
+#+END_EXAMPLE
+--------------------------------------------------------------------------------------------------------------
 Approach 1: Using SQRT, POW() functions and math knowledge 
 #+BEGIN_SRC SQL
 SELECT ROUND(MIN(SQRT(POW(p1.x - p2.x,2)+POW(p1.y - p2.y,2))),2)AS Shortest 
