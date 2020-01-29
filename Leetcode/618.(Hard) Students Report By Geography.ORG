@@ -1,0 +1,30 @@
+A U.S graduate school has students from Asia, Europe and America. The students' location information are stored in table student as below.
+#+BEGIN_EXAMPLE
+| name   | continent |
+|--------|-----------|
+| Jack   | America   |
+| Pascal | Europe    |
+| Xi     | Asia      |
+| Jane   | America   |
+#+END_EXAMPLE
+
+Pivot the continent column in this table so that each name is sorted alphabetically and displayed underneath its corresponding continent. The output headers should be America, Asia and Europe respectively. It is guaranteed that the student number from America is no less than either Asia or Europe.
+
+For the sample input, the output is:
+#+BEGIN_EXAMPLE
+| America | Asia | Europe |
+|---------|------|--------|
+| Jack    | Xi   | Pascal |
+| Jane    |      |        |
+#+END_EXAMPLE
+
+Follow-up: If it is unknown which continent has the most students, can you write a query to generate the student report?
+
+
+
+
+#+BEGIN_SRC SQL
+
+
+
+#END_SRC
