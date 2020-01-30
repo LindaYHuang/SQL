@@ -1,0 +1,54 @@
+Table number contains many numbers in column num including duplicated ones.
+Can you write a SQL query to find the biggest number, which only appears once.
+#+BEGIN_EXAMPLE
++---+
+|num|
++---+
+| 8 |
+| 8 |
+| 3 |
+| 3 |
+| 1 |
+| 4 |
+| 5 |
+| 6 | 
+#+END_EXAMPLE
+
+For the sample data above, your query should return the following result:
+#+BEGIN_EXAMPLE
++---+
+|num|
++---+
+| 6 |
+#+END_EXAMPLE
+
+Note:
+If there is no such number, just output null.
+
+
+---------------------------------------------------------------------
+
+#+BEGIN_SRC sql
+#解1
+# 必须套一个subquery.. 为什么直接SELECT MAX()选不出最大值
+SELECT MAX(t.num1) AS num
+FROM (SELECT num AS num1
+      FROM my_numbers
+      GROUP BY num
+      HAVING COUNT(num) = 1) t
+      
+      
+#解2
+SELECT IFNULL(
+	(
+		SELECT *
+		from my_numbers as M
+		group by M.num
+		having COUNT(*)=1
+		order by M.num desc
+		limit 0,1
+	)
+, NULL) AS num
+
+
+#+END_SRC
