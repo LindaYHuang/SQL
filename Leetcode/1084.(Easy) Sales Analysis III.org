@@ -26,7 +26,7 @@ This table has no primary key, it can have repeated rows.
 product_id is a foreign key to Product table.
 #+END_EXAMPLE
  
-Write an SQL query that reports the buyers who have bought S8 but not iPhone. Note that S8 and iPhone are products present in the Product table.
+Write an SQL query that reports the products that were only sold in spring 2019. That is, between 2019-01-01 and 2019-03-31 inclusive.
 
 The query result format is in the following example:
 #+BEGIN_EXAMPLE
@@ -58,3 +58,35 @@ Result table:
 +-------------+--------------+
 #+END_EXAMPLE
 The product with id 1 was only sold in spring 2019 while the other two were sold after
+
+---------------------------------------------------------------------
+- Solution1:
+#+BEGIN_SRC sql
+#The MINUS compares the results of two queries and returns distinct rows from the result set of the first #query that does not appear in the result set of the second query.
+#https://www.mysqltutorial.org/mysql-minus/
+SELECT DISTINCT s.product_id, p.product_name
+FROM sales s LEFT JOIN product p ON s.product_id = p.product_id
+WHERE (s.sale_date >= '2019-01-01' AND s.sale_date <= '2019-03-31') 
+MINUS
+(   SELECT DISTINCT s.product_id
+    FROM sales s
+    WHERE (s.sale_date < '2019-01-01' OR s.sale_date > '2019-03-31')
+)
+#+END_SRC
+
+
+
+- Solution 2:
+#+BEGIN_SRC sql
+SELECT DISTINCT s.product_id, p.product_name
+FROM sales s LEFT JOIN product p ON s.product_id = p.product_id
+WHERE (s.sale_date >= '2019-01-01' AND s.sale_date <= '2019-03-31') A
+LEFT JOIN
+(   SELECT DISTINCT s.product_id
+    FROM sales s
+    WHERE (s.sale_date < '2019-01-01' or s.sale_date > '2019-03-31')
+)as B 
+    on (A.product_id = B.product_id)
+where B.product_id is NULL
+
+#+END_SRC
