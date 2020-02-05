@@ -60,11 +60,14 @@ Result table:
 - Solution:
 
 #+BEGIN_SRC sql
-
+#there may be more than 1 first year
 SELECT product_id, 
-       MIN(year) AS first_year,
+       year AS first_year,
        quantity,
-       price
-FROM sales
-GROUP BY product_id
+       price       
+FROM sales s
+WHERE (s.product_id, s.year) IN 
+      (SELEC product_id, min(year) 
+       FROM sales
+       GROUP BY product_id)
 #+END_SRC
