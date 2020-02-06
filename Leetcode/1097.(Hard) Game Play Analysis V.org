@@ -31,4 +31,17 @@ Result table:
 Player 1 and 3 installed the game on 2016-03-01 but only player 1 logged back in on 2016-03-02 so the day 1 retention of 2016-03-01 is 1 / 2 = 0.50
 Player 2 installed the game on 2017-06-25 but didn’t log back in on 2017-06-26 so the day 1 retention of 2017-06-25 is 0 / 1 = 0.00
 
-这道题和上周pdd笔试第三题好像啊，pdd要求第29日留存率要用`lead()`函数，比这题还难一些。
+- Solution
+#+BEGIN_SRC SQL
+SELECT a.install_dt,
+       a.installs, 
+       ROUND((COUNT(b.event_date)/a.installs),2) AS Day1_retention
+FROM (SELECT player_id,
+             MIN(event_date) AS install_dt,
+             COUNT(player_id) AS installs
+      FROM Activity
+      GROUP BY player_id) AS a
+LEFT JOIN Activity b ON (a.player_id = b.player_id AND b.event_date = a.event_date +1 )
+GROUP BY a.install_dt
+
+#END_SRC
