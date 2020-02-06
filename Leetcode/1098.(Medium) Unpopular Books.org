@@ -71,5 +71,9 @@ Result table:
 - Solution:
 
 #+BEGIN_SRC sql
-
+SELECT o.book_id,b.name
+FROM orders o LEFT JOIN books b on o.book_id = b.book_id
+GROUP BY o.book_id
+HAVING (SUM(o.quantity) < 10
+        AND DATEDIFF('2019-06-23',B.available_from) < 30)
 #+END_SRC
