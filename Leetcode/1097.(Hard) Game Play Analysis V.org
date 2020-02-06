@@ -44,4 +44,4 @@ FROM (SELECT player_id,
 LEFT JOIN Activity b ON (a.player_id = b.player_id AND b.event_date = a.event_date +1 )
 GROUP BY a.install_dt
 
-#END_SRC
+#+END_SRC
