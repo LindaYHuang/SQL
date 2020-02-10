@@ -1,5 +1,5 @@
-Table: Traffic
 #+BEGIN_EXAMPLE
+Table: Traffic
 +---------------+---------+
 | Column Name   | Type    |
 +---------------+---------+
