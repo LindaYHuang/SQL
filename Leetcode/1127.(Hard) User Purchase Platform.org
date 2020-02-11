@@ -1,6 +1,5 @@
 #+BEGIN_EXAMPLE
 Table: Spending
-#+BEGIN_EXAMPLE
 +-------------+---------+
 | Column Name | Type    |
 +-------------+---------+
