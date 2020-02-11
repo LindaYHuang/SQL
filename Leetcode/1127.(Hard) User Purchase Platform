@@ -1,5 +1,6 @@
 #+BEGIN_EXAMPLE
 Table: Spending
+#+BEGIN_EXAMPLE
 +-------------+---------+
 | Column Name | Type    |
 +-------------+---------+
@@ -8,6 +9,7 @@ Table: Spending
 | platform    | enum    | 
 | amount      | int     |
 +-------------+---------+
+
 #+END_EXAMPLE
 The table logs the spendings history of users that make purchases from an online shopping website which has a desktop and a mobile application.
 (user_id, spend_date, platform) is the primary key of this table.
