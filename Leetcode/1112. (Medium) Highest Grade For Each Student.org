@@ -1,7 +1,20 @@
-1. Get highest grade for each student
-2. In case of a tie, choose the course with smaller `course_id`
-3. sorted by increasing `student_id`
 #+BEGIN_EXAMPLE
+Table: Enrollments
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| student_id    | int     |
+| course_id     | int     |
+| grade         | int     |
++---------------+---------+
+(student_id, course_id) is the primary key of this table.
+#+END_EXAMPLE
+Write a SQL query to find the highest grade with its corresponding course for each student. In case of a tie, you should find the course with the smallest course_id. The output must be sorted by increasing student_id.
+
+ 
+The query result format is in the following example:
+#+BEGIN_EXAMPLE
+Enrollments table:
 +------------+-------------------+
 | student_id | course_id | grade |
 +------------+-----------+-------+
@@ -13,6 +26,10 @@
 | 3          | 2         | 75    |
 | 3          | 3         | 82    |
 +------------+-----------+-------+
+
+1. Get highest grade for each student
+2. In case of a tie, choose the course with smaller `course_id`
+3. sorted by increasing `student_id`
 
 Result table:
 +------------+-------------------+
@@ -26,7 +43,21 @@ Result table:
 
 
 
-```sql
+#+BEGIN_SRC sql
+#MINE
+SELECT student_id, course_id, grade 
+FROM Enrollments
+WHERE (course_id,grade) IN
+      (SELECT course_id,grade
+       FROM Enrollments
+       GROUP BY student_id
+       ORDER BY grade DESC, course_id 
+       LIMIT 1)
+ORDER BY student_id
+
+
+
+#DENNYZHANG
 SELECT student_id, MIN(course_id) course_id, grade
 FROM Enrollments
 WHERE (student_id, grade) IN 
@@ -35,4 +66,5 @@ WHERE (student_id, grade) IN
         GROUP BY student_id)
 GROUP BY student_id
 ORDER BY student_id
-```
+
+#+END_SRC sql
