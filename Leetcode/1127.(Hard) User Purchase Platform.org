@@ -8,11 +8,11 @@ Table: Spending
 | platform    | enum    | 
 | amount      | int     |
 +-------------+---------+
-
-#+END_EXAMPLE
 The table logs the spendings history of users that make purchases from an online shopping website which has a desktop and a mobile application.
 (user_id, spend_date, platform) is the primary key of this table.
 The platform column is an ENUM type of ('desktop', 'mobile').
+#+END_EXAMPLE
+
 Write an SQL query to find the total number of users and the total amount spent using mobile only, desktop only and both mobile and desktop together for each date.
 
 The query result format is in the following example:
@@ -42,3 +42,49 @@ Result table:
 #+END_EXAMPLE
 On 2019-07-01, user 1 purchased using both desktop and mobile, user 2 purchased using mobile only and user 3 purchased using desktop only.
 On 2019-07-02, user 2 purchased using mobile only, user 3 purchased using desktop only and no one purchased using both platforms.
+
+#+BEGIN_SRC SQL
+#难点:
+#需要为platform字段构造一个'both'值, 这里用了CASE WHEN END语句
+#即使某天没有"双平台同时消费的用户"也要显示
+#这里在"table aa"里组合了所有 spend_date 和 platform, 然后LEFT JOIN保证每天都有3个platform项
+#再用 COALESCE 语句把NULL值替换成0     The COALESCE() function returns the first non-null value in a list.
+SELECT t1.spend_date,
+       platform,
+       COALESCE(t2.total_amount,0) AS total_amount,
+       COALESCE(t2.total_users,0) AS total_users
+ FROM 
+      (SELECT DISTINCE spend_date, tt.platform
+       FROM Spending JOIN
+            (SELECT 'desktop' AS platform UNION
+             SELECT 'mobile' AS platform UNION
+             SELECT 'both' AS platform) tt
+       ) AS t1
+ LEFT JOIN
+       (SELECT spend_date,
+               platform,
+               SUM(amount) total_amount,       
+               SUM(user_id) total_users
+       FROM 
+            (SELECT spend_date
+                    (CASE COUNT(DISTINCT platform)
+                          WHEN 1 THEN platform
+                          WHEN 2 THEN 'both'
+                    END) platform,
+                    SUM(amount) total_amount, 
+                    user_id
+            FROM Spending
+            GROUP BY spend_date, user_id
+            ) 
+         GROUP BY spend_date, platform
+       ) AS t2
+
+ ON t1.spend_date = t2.spend_date AND t1.platform = t2.platform
+
+
+
+
+#+END_SRC
+
+
+
