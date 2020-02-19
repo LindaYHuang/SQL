@@ -50,6 +50,6 @@ SELECT viewer_id AS id,
        COUNT(DISTINCT user_id) AS active_users      
 FROM Views 
 GROUP BY viewer_id,view_date
-HAVING COUNT(article_id) >1
+HAVING COUNT(DISTINCT article_id) >1
 ORDER BY viewer_id
 #+END_SRC
