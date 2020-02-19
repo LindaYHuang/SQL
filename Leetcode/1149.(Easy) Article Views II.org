@@ -46,9 +46,10 @@ Result table:
 
 #+BEGIN_SRC sql
 #没验证
-SELECT activity_date AS day,
+SELECT viewer_id AS id,
        COUNT(DISTINCT user_id) AS active_users      
-FROM Activity 
-WHERE activity_date >= DATE_ADD('2019-07-27',INTERVAL -30 DAY)
-GROUP BY user_id
+FROM Views 
+GROUP BY viewer_id,view_date
+HAVING COUNT(article_id) >1
+ORDER BY viewer_id
 #+END_SRC
