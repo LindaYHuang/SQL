@@ -49,7 +49,7 @@ User 1 and 2 each had 1 session in the past 30 days while user 3 had 2 session
 
 #+BEGIN_SRC SQL
 
-SELECT IFNULL(ROUND(AVG(t.num),0.00) AS average_sessions_per_user,
+SELECT IFNULL(ROUND(AVG(t.num),0.00) AS average_sessions_per_user
 FROM (
        SELECT COUNT(DISTINCT session_id) num,
               user_id
