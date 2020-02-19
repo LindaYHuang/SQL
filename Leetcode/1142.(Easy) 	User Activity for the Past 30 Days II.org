@@ -48,16 +48,13 @@ User 1 and 2 each had 1 session in the past 30 days while user 3 had 2 session
 #+END_EXAMPLE
 
 #+BEGIN_SRC SQL
-SELECT t.login_date
-       COUNT(t.user_id)AS user_count
-FROM
-       (SELECT MIN(activity_date) AS login_date,
-               user_id
-       FROM Traffic
-       WHERE activity = 'login' 
+
+SELECT IFNULL(ROUND(AVG(t.num),0.00) AS average_sessions_per_user,
+FROM (
+       SELECT COUNT(DISTINCT session_id) num,
+              user_id
+       FROM Activity 
+       WHERE activity_date >= DATE_ADD('2019-07-27',INTERVAL -30 DAY)
        GROUP BY user_id) t
-WHERE DATEDIFF(day, t.login_date,'2019-06-21') <= 90    #DATEDIFF(interval, date1, date2)
-# OR WHERE login_date >= DATE_ADD('2019-06-30', INTERVAL -90 DAY)
-GROUP BY login_date 
 
 #+END_SRC
