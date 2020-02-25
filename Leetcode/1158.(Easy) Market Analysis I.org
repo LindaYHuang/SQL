@@ -85,3 +85,23 @@ Result table:
 | 4         | 2018-05-21 | 0              |
 +-----------+------------+----------------+
 #+END_EXAMPLE
+
+---------------------------------------------------------------------
+- Solution:
+
+#+BEGIN_SRC sql
+
+SELECT u.user_id ,
+       u.join_date,  
+       IFNULL(t.orders_in_2019,0) AS orders_in_2019
+FROM Users u
+LEFT JOIN
+       (SELECT o.buyer_id, 
+               COUNT(o.order_id) AS orders_in_2019
+       FROM Orders o 
+       #where order_date between date('2019-01-01') and date('2019-12-31')
+       WHERE YEAR(o.order_date) = 2019
+       GROUP BY u.user_id) t
+ON u.user_id = t.buyer_id
+
+#+END_SRC
