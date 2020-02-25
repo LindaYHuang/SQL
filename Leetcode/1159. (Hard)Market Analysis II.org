@@ -90,9 +90,17 @@ The answer for the user with id 4 is no because the brand of their second sold i
 
 #+BEGIN_SRC sql
 #没验证
-SELECT activity_date AS day,
-       COUNT(DISTINCT user_id) AS active_users      
-FROM Activity 
+SELECT u.user_id AS seller_id ,
+       ) AS 2nd_item_fav_brand      
+FROM user u 
+LEFT JOIN
+          (SELECT o.seller_id,i.item_brand
+          FROM orders o
+          INNER JOIN Items i ON o.item_id = i.item_id
+          ORDER BY o.seller_id,
+          
+          )
+          
 WHERE activity_date >= DATE_ADD('2019-07-27',INTERVAL -30 DAY)
-GROUP BY user_id
+GROUP BY seller_id
 #+END_SRC
