@@ -103,7 +103,25 @@ LEFT JOIN
           ORDER BY o.seller_id, o.order_date,
           
           )
-          
-WHERE activity_date >= DATE_ADD('2019-07-27',INTERVAL -30 DAY)
-GROUP BY seller_id
+ORDER BY seller_id
 #+END_SRC
+
+#+BEGIN_SRC sql
+# https://code.dennyzhang.com/market-analysis-ii
+select user_id as seller_id, 
+       if(isnull(item_brand), "no", "yes") as 2nd_item_fav_brand
+from Users 
+left join
+       (select seller_id, item_brand
+        from Orders inner join Items
+        on Orders.item_id = Items.item_id
+        where (seller_id, order_date) in
+              (select seller_id, min(order_date) as order_date
+               from Orders
+               where (seller_id, order_date) not in
+                                  (select seller_id, min(order_date) from Orders group by seller_id)
+                                   group by seller_id)
+ ) as t
+on Users.user_id = t.seller_id and favorite_brand = item_brand
+#+END_SRC
+
