@@ -80,7 +80,7 @@ Result table:
 +-----------+--------------------+
 The answer for the user with id 1 is no because they sold nothing.
 The answer for the users with id 2 and 3 is yes because the brands of their second sold items are their favorite brands.
-The answer for the user with id 4 is no because the brand of their second sold item is n
+The answer for the user with id 4 is no because the brand of their second sold item is not their favorite brand.
 #+END_EXAMPLE
 
 
@@ -91,13 +91,16 @@ The answer for the user with id 4 is no because the brand of their second sold i
 #+BEGIN_SRC sql
 #没验证
 SELECT u.user_id AS seller_id ,
-       ) AS 2nd_item_fav_brand      
+       CASE WHEN 
+       END AS 2nd_item_fav_brand      
 FROM user u 
 LEFT JOIN
-          (SELECT o.seller_id,i.item_brand
+          (SELECT o.seller_id,
+                  o.order_date,
+                  i.item_brand
           FROM orders o
           INNER JOIN Items i ON o.item_id = i.item_id
-          ORDER BY o.seller_id,
+          ORDER BY o.seller_id, o.order_date,
           
           )
           
