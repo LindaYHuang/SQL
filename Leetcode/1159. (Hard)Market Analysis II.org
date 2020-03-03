@@ -91,18 +91,21 @@ The answer for the user with id 4 is no because the brand of their second sold i
 #+BEGIN_SRC sql
 #没验证
 SELECT u.user_id AS seller_id ,
-       CASE WHEN 
-       END AS 2nd_item_fav_brand      
+       IFNULL（CASE WHEN u.favorite_brand = t.item_brand then 'yes'
+                    ELSE 'no'
+               END，'no'） AS 2nd_item_fav_brand      
 FROM user u 
 LEFT JOIN
           (SELECT o.seller_id,
                   o.order_date,
-                  i.item_brand
-          FROM orders o
+                  i.item_brand,
+                  case when @id=seller_id then @cnt:=@cnt+1
+                       when @id:=seller_id then @cnt:=1 end cnt
+          FROM orders o, (select @id:=null, @cnt:=null) t1
           INNER JOIN Items i ON o.item_id = i.item_id
           ORDER BY o.seller_id, o.order_date,
-          
           )
+ON t.cnt=2 and u.user_id = t.seller_id
 ORDER BY seller_id
 #+END_SRC
 
