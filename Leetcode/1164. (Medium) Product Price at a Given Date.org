@@ -43,22 +43,6 @@ Result table:
 - Solution:
 
 #+BEGIN_SRC sql
-#没验证, 为什么不行？
-SELECT DISTINCT p.product_id,
-       IF(ISNULL(t.new_price),10, t.new_price) AS price      
-FROM Products p
-lEFT JOIN  
-       (SELECT product_id, 
-               new_price
-        FROM Products
-        GROUP BY product_id
-        HAVING MAX(change_date） <= '2019-08-16' ) t     #   ？？？？？
-ON p.product_id = t.product_id
-ORDER BY product_id
-#+END_SRC
-
-#方法2
-#+BEGIN_SRC sql
 select t1.product_id as product_id, if(isnull(t2.price), 10, t2.price) as price
 from
        (select distinct product_id
