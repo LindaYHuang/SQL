@@ -77,11 +77,9 @@ Donald didn't have any rides, the distance travelled by him is 0.
 #+BEGIN_SRC sql
 
 SELECT u.name
-,t.dist as travelled_distance
+,sum(if(isnull(t.distance),0,t.distance)) as travelled_distance
 FROM User u 
-LEFT JOIN 
-    (SELECT user_id,sum(distance) as dist
-    From Rides 
-    Group by user_id) t on (u.id = t.user_id)
-ORDER BY travelled_distance DESC, name ASC
+LEFT JOIN Rides t on u.id = t.user_id
+Group by u.name
+ORDER BY travelled_distance DESC, name
 #+END_SRC
