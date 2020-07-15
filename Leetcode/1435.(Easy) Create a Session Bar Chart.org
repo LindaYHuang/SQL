@@ -35,13 +35,14 @@ For session_id 5 has a duration greater or equal than 15 minutes.
 
 #+BEGIN_SRC sql
 
-SELECT 
- Case 
-      When duration < 300 Then '[0-5>'
-      When duration >= 300 and duration < 600 and Then '[5-10>'
-      When duration >= 600 and duration < 900 and Then '[10-15>'
-      Else '15 or more' as bin
- End,
- count (session_id)
- From Sessions Group by bin
+SELECT t.bin,count (t.session_id)
+ From (Select s.*,
+       Case 
+        When duration < 300 Then '[0-5>'
+        When duration >= 300 and duration < 600 and Then '[5-10>'
+        When duration >= 600 and duration < 900 and Then '[10-15>'
+        Else '15 or more' as bin
+       End
+       From Sessions s) as t
+ Group by t.bin
 #+END_SRC
