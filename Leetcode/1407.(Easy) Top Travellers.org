@@ -71,3 +71,17 @@ Elvis and Lee travelled 450 miles, Elvis is the top traveller as his name is alp
 Bob, Jonathan, Alex and Alice have only one ride and we just order them by the total distances of the ride.
 Donald didn't have any rides, the distance travelled by him is 0.
 #+END_EXAMPLE
+---------------------------------------------------------------------
+- Solution:
+
+#+BEGIN_SRC sql
+
+SELECT u.name
+,t.dist as travelled_distance
+FROM User u 
+LEFT JOIN 
+    (SELECT user_id,sum(distance) as dist
+    From Rides 
+    Group by user_id) t on (u.id = t.user_id)
+ORDER BY travelled_distance DESC, name ASC
+#+END_SRC
