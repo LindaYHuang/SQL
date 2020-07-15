@@ -76,3 +76,20 @@ Result table:
 The npv value of (7, 2018) is not present in the NPV table, we consider it 0.
 The npv values of all other queries can be found in the NPV table.
 #+END_EXAMPLE
+
+
+---------------------------------------------------------------------
+- Solution:
+
+#+BEGIN_SRC sql
+
+SELECT q.*
+,if(isnull(n.npv),0,n.npv) as npv
+FROM Queries q 
+LEFT JOIN NPV n on q.id = n.id AND q.year = n.year
+#+END_SRC
+
+
+
+
+
