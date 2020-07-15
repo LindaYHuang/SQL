@@ -35,7 +35,7 @@ For session_id 5 has a duration greater or equal than 15 minutes.
 
 #+BEGIN_SRC sql
 
-SELECT t.bin,count (t.session_id)
+SELECT t.bin,count (t.session_id) as total
  From (Select s.*,
        Case 
         When duration < 300 Then '[0-5>'
