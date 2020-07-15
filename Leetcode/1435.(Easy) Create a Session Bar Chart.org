@@ -35,12 +35,13 @@ For session_id 5 has a duration greater or equal than 15 minutes.
 
 #+BEGIN_SRC sql
 
-SELECT u.name
-,t.dist as travelled_distance
-FROM User u 
-LEFT JOIN 
-    (SELECT user_id,sum(distance) as dist
-    From Rides 
-    Group by user_id) t on (u.id = t.user_id)
-ORDER BY travelled_distance DESC, name ASC
+SELECT 
+ Case 
+      When duration < 300 Then '[0-5>'
+      When duration >= 300 and duration < 600 and Then '[5-10>'
+      When duration >= 600 and duration < 900 and Then '[10-15>'
+      Else '15 or more' as bin
+ End,
+ count (session_id)
+ From Sessions Group by bin
 #+END_SRC
