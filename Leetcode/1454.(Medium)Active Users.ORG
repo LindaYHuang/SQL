@@ -70,22 +70,16 @@ User Jonathan with id = 7 logged in 7 times in 6 different days, five of them we
 - Solution:
 
 #+BEGIN_SRC sql
-#没验证
-SELECT u.user_id AS seller_id ,
-       IFNULL（CASE WHEN u.favorite_brand = t.item_brand then 'yes'
-                    ELSE 'no'
-               END，'no'） AS 2nd_item_fav_brand      
-FROM user u 
-LEFT JOIN
-          (SELECT o.seller_id,
-                  o.order_date,
-                  i.item_brand,
-                  case when @id=seller_id then @cnt:=@cnt+1
-                       when @id:=seller_id then @cnt:=1 end cnt
-          FROM orders o, (select @id:=null, @cnt:=null) t1
-          INNER JOIN Items i ON o.item_id = i.item_id
-          ORDER BY o.seller_id, o.order_date,
-          )
-ON t.cnt=2 and u.user_id = t.seller_id
-ORDER BY seller_id
+
+SELECT t1.id, a.name
+FROM 
+     (SELECT distinct id,L1.login_date
+     from Logins L1 Inner join Logins L2 on L1.id = L2.id AND datediff(L1.login_date,login_date) between 1 and 4
+     Group By L1.id,L1.login_date
+     HAVING count(distinct(L2.login_date)) = 4
+     )t1
+Inner join Accounts a on t1.id=a.id
+Order by id
+
+
 #+END_SRC
