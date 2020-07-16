@@ -48,8 +48,8 @@ p1 = 1 and p2 = 3 It's not possible because has an area equal to 0.
 - Solution:
 
 #+BEGIN_SRC sql
-SELECT actor_id,director_id
-FROM ActorDirector
-GROUP BY actor_id,director_id
-HAVING COUNT(timestamp) >=3
+SELECT pp1.id as p1, pp2.id as p2, (abs(x_value - x_value)*abs(y_value - y_value)) as area
+FROM Points pp1 inner join Points pp2
+ON pp1.id < pp2.id AND pp1.x_value !=pp2.x_value AND pp1.x_value != pp2.y_value
+ORDER BY aera DESC,p1,p2
 #+END_SRC
