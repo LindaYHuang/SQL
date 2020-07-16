@@ -14,7 +14,6 @@ This table contains the company id, the id, the name and the salary for an emplo
 #+END_EXAMPLE
 
 Write an SQL query to find the salaries of the employees after applying taxes.
-
 The tax rate is calculated for each company based on the following criteria:
 
 0% If the max salary of any employee in the company is less than 1000$.
@@ -69,8 +68,14 @@ For example, Salary for Morninngcat (3, 15) after taxes = 7777 - 7777 * (24 / 10
 - Solution:
 
 #+BEGIN_SRC sql
-SELECT actor_id,director_id
-FROM ActorDirector
-GROUP BY actor_id,director_id
-HAVING COUNT(timestamp) >=3
+
+SELECT a.company_id, s.employee_id, s.employee_name, 
+Cast(ROUND((CASE
+              WHEN t.maxsalary <1000 THEN s.salary
+              WHEN t.maxsalary >=1000 and t.maxsalary < 10000 THEN s.salary*0.76
+              ELSE s.salary*0.51
+            END),0) as int) as salary
+FROM Salaries s inner join 
+(SELECT company_id, max(salary) as maxsalary FROM Salaries Group BY company_id) t
+ON s.company_id = t.company_id
 #+END_SRC
