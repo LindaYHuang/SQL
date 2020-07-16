@@ -70,8 +70,19 @@ As shown, you need find the value of each boolean exprssion in the table using t
 - Solution:
 
 #+BEGIN_SRC sql
-SELECT actor_id,director_id
-FROM ActorDirector
-GROUP BY actor_id,director_id
-HAVING COUNT(timestamp) >=3
+SELECT t.left_operand,t.operator,t.right_operand,
+(Case 
+    WHEN t.l_value > R_value AND t.operator = '>' then "true"
+    WHEN t.l_value = R_value AND t.operator = '=' then "true"
+    WHEN t.l_value < R_value AND t.operator = '<' then "true"
+    else "false"
+END) as value
+From (SELECT E.*, V1.value as l_value, V2.value as R_value
+      FROM Expressions E 
+      INNER Join Variables V1 on E.left_operand = V1.name
+      INNER Join Variables V2 on E.right_operand = V2.name)  t
+
+
+
+
 #+END_SRC
