@@ -84,8 +84,14 @@ So, we only return the information of Student 2.
 - Solution:
 
 #+BEGIN_SRC sql
-SELECT actor_id,director_id
-FROM ActorDirector
-GROUP BY actor_id,director_id
-HAVING COUNT(timestamp) >=3
+SELECT student.*
+FROM Student where student_id not in
+    (Select E1.student_id 
+    FROM Exams E1
+    Inner join 
+      (SELECT exam_id,Min(score) as Minscore, MAX(score) as maxscore
+       From Exam E2 
+       GROUP BY exam_id)  t
+    on E1.exam_id = t.exam_id 
+    WHERE E1.score = t.Minscore Or E1.score = t.Maxscore)
 #+END_SRC
