@@ -99,5 +99,30 @@ PIVOT
     FOR wd IN ([1], [2], [3], [4], [5],[6],[7])  
 ) AS PivotTable
 ORDER BY Category
+
+###IF We don't need to transfer weekday from numbers to days, we can create a dynamically pivot data
+--DECLARE THE DYNAMICALLY CREATED SQL script
+DECLARE @SQLQUERY AS NVARCHAR(MAX)
+--Declare the dynamical pivoted col values
+DECLARE @PivotCol AS INT(MAX)
+
+-- Generate the list of the weekdays that will become column headers
+SELECT @PivotCol = COLESCE(@PivotCol + ',','') + wd
+FROM (   SELECT DATEPART(WEEKDAY,o.order_date) AS wd,
+         FROM Items i LEFT JOIN Orders o ON o.item_id = i.item_id) as a
+
+--Create the dynamic query 
+SET @SQLQUERY = N'SELECT o.Order_date,o.quantity,DATEPART(WEEKDAY,o.order_date) AS wd, i.item_category AS Category'
+                  + @PivotCol +
+                  'FROM Items i LEFT JOIN Orders o ON o.item_id = i.item_id) AS SourceTable
+                   PIVOT  (  
+                           COLESCE(SUM(quantity),0)
+                           FOR wd IN ('+  @PivotCol  +')  
+                  ) AS PivotTable
+                  ORDER BY Category'
+EXEC SP_EXCUTESQL @SQLQUERY
+
+
 #+END_SRC
    
+https://www.youtube.com/watch?v=xpOq1_Ll9zQ
