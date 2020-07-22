@@ -87,8 +87,17 @@ There are no sales of T-Shirt.
 - Solution:
 
 #+BEGIN_SRC sql
-SELECT customer_id
-FROM Customer c 
-GROUP BY customer_id
-HAVING COUNT(DISTINCT c.product_key)  = (SELECT COUNT(*) FROM Product) 
+SELECT Category,
+[1] AS Monday, [2] AS Tuesday, [3] AS Wednesday, [4] AS Thursday, [5] AS Friday,[6] AS Saturday,[7] AS Sunday
+FROM (
+    SELECT o.Order_date,o.quantity,DATEPART(WEEKDAY,o.order_date) AS wd,
+    i.item_category AS Category
+    FROM Items i LEFT JOIN Orders o ON o.item_id = i.item_id) AS SourceTable
+PIVOT  
+(  
+    ISNULL(SUM(quantity),0)
+    FOR wd IN ([1], [2], [3], [4], [5],[6],[7])  
+) AS PivotTable
+ORDER BY Category
 #+END_SRC
+   
