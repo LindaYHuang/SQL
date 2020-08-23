@@ -109,8 +109,8 @@ from
       inner join Calls   c  ON (p.id = c.caller_id  or p.id = c.callee_id)) temp
 group by c_code
 having avg(duration) > (select avg(duration) from calls)    
-)
-inner join country co ON c_code = co.country_code
+) a
+inner join country co ON a.c_code = co.country_code
  
 #+END_SRC sql
 
