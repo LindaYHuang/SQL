@@ -52,11 +52,11 @@ For 2020-06-02, Sold item is (Masks), we just return it.
 - Solution:
 
 #+BEGIN_SRC sql
-Select sell_date, t. num_sold, CONCAT(a.Product,',',b.Product)
+Select a.sell_date, t. num_sold, CONCAT(a.Product,',',b.Product)
 from (select * from Activities b Order by Product) a
-left join 
+inner join 
     (select * from Activities b Order by Product) b on (a.sell_date = b.sell_date and a.Product != b.Product)
-left join 
+inner join 
     (select sell_date, count(sell_date) as num_sold
     from Activities 
     group by sell_date)  t on a.sell_date = t.sell_date
