@@ -44,3 +44,21 @@ For 2020-05-30, Sold items were (Headphone, Basketball, T-shirt), we sort them l
 For 2020-06-01, Sold items were (Pencil, Bible), we sort them lexicographically and separate them by comma.
 For 2020-06-02, Sold item is (Masks), we just return it.
 #+END_EXAMPLE
+
+
+
+
+---------------------------------------------------------------------
+- Solution:
+
+#+BEGIN_SRC sql
+Select sell_date, t. num_sold, CONCAT(a.Product,',',b.Product)
+from (select * from Activities b Order by Product) a
+left join 
+    (select * from Activities b Order by Product) b on (a.sell_date = b.sell_date and a.Product != b.Product)
+left join 
+    (select sell_date, count(sell_date) as num_sold
+    from Activities 
+    group by sell_date)  t on a.sell_date = t.sell_date
+order by sell_date
+#+END_SRC sql
