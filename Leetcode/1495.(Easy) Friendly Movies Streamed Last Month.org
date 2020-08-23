@@ -80,8 +80,8 @@ Result table:
 
 #+BEGIN_SRC sql
 Select title 
-from Content c inner  join TVProgram t on c.content_id = t.comtemt_id
+from Content c inner  join TVProgram t on c.content_id = t.comtent_id
 where c.Kids_content = 'Y' 
       and c.content_type  = 'Movies'
-      and datepart(month, program_date) = 6
+      and datepart(month, t.program_date) = 6
 #+END_SRC sql
