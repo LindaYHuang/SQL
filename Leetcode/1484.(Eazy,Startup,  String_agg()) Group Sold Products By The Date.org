@@ -52,6 +52,8 @@ For 2020-06-02, Sold item is (Masks), we just return it.
 - Solution:
 
 #In T-SQL, String_add() can solve the problem easily
+
+
 ## WITHIN GROUP()
 #+BEGIN_SRC sql
     SELECT sell_date, count(DISTINCT product) num_sold, 
