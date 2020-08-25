@@ -51,14 +51,21 @@ For 2020-06-02, Sold item is (Masks), we just return it.
 ---------------------------------------------------------------------
 - Solution:
 
+#In T-SQL, String_add() can solve the problem easily
+## WITHIN GROUP()
 #+BEGIN_SRC sql
-Select a.sell_date, t. num_sold, CONCAT(a.Product,',',b.Product)
-from (select * from Activities b Order by Product) a
-inner join 
-    (select * from Activities b Order by Product) b on (a.sell_date = b.sell_date and a.Product != b.Product)
-inner join 
-    (select sell_date, count(sell_date) as num_sold
-    from Activities 
-    group by sell_date)  t on a.sell_date = t.sell_date
-order by sell_date
+    SELECT sell_date, count(DISTINCT product) num_sold, 
+           String_agg(product,',') WITHIN GROUP(ORDER BY product ASC) as products
+    FROM Activities
+    GROUP BY sell_date
+    ORDER BY sell_date
+#+END_SRC sql
+
+
+#In MySQL, Group_concat() can solve the problem easily
+#+BEGIN_SRC sql
+SELECT sell_date, count(DISTINCT product) num_sold, group_concat(DISTINCT product) products
+FROM Activities
+GROUP BY sell_date
+ORDER BY sell_date
 #+END_SRC sql
