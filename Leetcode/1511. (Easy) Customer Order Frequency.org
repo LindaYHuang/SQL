@@ -98,3 +98,26 @@ Winston spent $300 (300 * 1) in June and $100 ( 10 * 1 + 45 * 2) in July 2020.
 Jonathan spent $600 (300 * 2) in June and $20 ( 2 * 10) in July 2020.
 Moustafa spent $110 (10 * 2 + 45 * 2) in June and $0 in July 2020.
 #+END_EXAMPLE
+
+
+
+---------------------------------------------------------------------
+- Solution:
+
+#+BEGIN_SRC sql
+SELECT t2.customer_id
+,c.name
+FROM 
+    (SELECT t1.customer_id, t1.month, SUM(t1.quantity*t1.price) as order_price
+        (Select o.customer_id, o.quantity, p.price, DATEPART(MONTH,o.order_date) as month
+         FROM Orders o 
+         INNER JOIN Product p ON (o.product_id = p.product_id)  
+         WHERE month in (6,7)) as t1
+    GROUP BY t1.customer_id, t1. month
+    HAVING order_price >100) as t2
+INNER JOIN Customers c ON t2.customer_id = c.customer_id
+#+END_SRC
+
+
+
+
