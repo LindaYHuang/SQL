@@ -124,7 +124,10 @@ FROM (
 INNER JOIN Customers c ON t3.customer_id = c.customer_id
 #+END_SRC
 
-SELECT t3.customer_id
+
+
+#+BEGIN_SRC sql
+SELECT t1.customer_id
 ,c.name
 FROM (
         (Select o.customer_id, 
@@ -136,9 +139,7 @@ FROM (
          AND
           SUM(CASE WHEN DATEPART(MONTH,o.order_date) = 7 THEN o.quantity*p.price else 0 END) >= 100)
          ) as t1
-
-
-INNER JOIN Customers c ON t3.customer_id = c.customer_id
+INNER JOIN Customers c ON t1.customer_id = c.customer_id
 #+END_SRC
 
 
