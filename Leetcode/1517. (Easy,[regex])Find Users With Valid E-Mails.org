@@ -47,7 +47,7 @@ Result table:
 +---------+-----------+-------------------------+
 The mail of user 2 doesn't have a domain.
 The mail of user 5 has # sign which is not allowed.
-The mail of user 6 doesn't have leetcode domain.
+The mail of user 6 doesn't have leetcode domain.Find Users With Valid E-Mails
 The mail of user 7 starts with a period.
 #+END_EXAMPLE
 
@@ -57,42 +57,19 @@ The mail of user 7 starts with a period.
 ---------------------------------------------------------------------
 - Solution:
 
-#+BEGIN_SRC sql
-SELECT t3.customer_id
-,c.name
-FROM (
-        (Select o.customer_id, DATEPART(MONTH,o.order_date), SUM(o.quantity*p.price)
-         FROM Orders o  
-         INNER JOIN Product p ON (o.product_id = p.product_id)  
-         GROUP BY o.customer_id, DATEPART(MONTH,o.order_date)
-         HAVING DATEPART(MONTH,o.order_date) = 6  AND SUM(o.quantity*p.price) >= 100) as t1
-       INNER JOIN
-        (Select o.customer_id, DATEPART(MONTH,o.order_date), SUM(o.quantity*p.price)
-         FROM Orders o  
-         INNER JOIN Product p ON (o.product_id = p.product_id)  
-         GROUP BY o.customer_id, DATEPART(MONTH,o.order_date)
-         HAVING DATEPART(MONTH,o.order_date) = 7  AND SUM(o.quantity*p.price) >= 100) as t2    
-         ON t1.customer_id = t2.customer_id ) t3
-
-INNER JOIN Customers c ON t3.customer_id = c.customer_id
-#+END_SRC
-
-
 
 #+BEGIN_SRC sql
-SELECT t1.customer_id
-,c.name
-FROM (
-        (Select o.customer_id, 
-         FROM Orders o  
-         INNER JOIN Product p ON (o.product_id = p.product_id)  
-         GROUP BY o.customer_id, 
-         HAVING 
-         (SUM(CASE WHEN DATEPART(MONTH,o.order_date) = 6 THEN o.quantity*p.price else 0 END) >= 100
-         AND
-          SUM(CASE WHEN DATEPART(MONTH,o.order_date) = 7 THEN o.quantity*p.price else 0 END) >= 100)
-         ) as t1
-INNER JOIN Customers c ON t1.customer_id = c.customer_id
+SELECT *  FROM Users
+WHERE (mail LIKE '[a-z]%' OR mail LIKE '[A-Z]%') 
+AND mail regex '^[a-zA-Z]+[a-zA-Z0-9_\\-\\.]{0,}@leetcode.com$' 
+
+#正则表达式
+#   ^ 表示开头
+#   + 匹配一个或多个,不包括空
+#   [] 表示集合里的任意一个
+#   \\ 用于转义特殊字符
+#   a{m,n} 匹配m到n个a，左侧不写为0，右侧不写为任意
+#   $ 表示以什么为结尾
 #+END_SRC
 
 
