@@ -1,0 +1,98 @@
+#+BEGIN_EXAMPLE
+SQL Schema
+Table: Users
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| user_id       | int     |
+| name          | varchar |
+| mail          | varchar |
++---------------+---------+
+user_id is the primary key for this table.
+This table contains information of the users signed up in a website. Some e-mails are invalid.
+#+END_EXAMPLE
+
+Write an SQL query to find the users who have valid emails.
+
+A valid e-mail has a prefix name and a domain where: 
+
+The prefix name is a string that may contain letters (upper or lower case), digits, underscore '_', period '.' and/or dash '-'. The prefix name must start with a letter.
+The domain is '@leetcode.com'.
+Return the result table in any order.
+
+The query result format is in the following example.
+
+ 
+#+BEGIN_EXAMPLE
+Users
++---------+-----------+-------------------------+
+| user_id | name      | mail                    |
++---------+-----------+-------------------------+
+| 1       | Winston   | winston@leetcode.com    |
+| 2       | Jonathan  | jonathanisgreat         |
+| 3       | Annabelle | bella-@leetcode.com     |
+| 4       | Sally     | sally.come@leetcode.com |
+| 5       | Marwan    | quarz#2020@leetcode.com |
+| 6       | David     | david69@gmail.com       |
+| 7       | Shapiro   | .shapo@leetcode.com     |
++---------+-----------+-------------------------+
+
+Result table:
++---------+-----------+-------------------------+
+| user_id | name      | mail                    |
++---------+-----------+-------------------------+
+| 1       | Winston   | winston@leetcode.com    |
+| 3       | Annabelle | bella-@leetcode.com     |
+| 4       | Sally     | sally.come@leetcode.com |
++---------+-----------+-------------------------+
+The mail of user 2 doesn't have a domain.
+The mail of user 5 has # sign which is not allowed.
+The mail of user 6 doesn't have leetcode domain.
+The mail of user 7 starts with a period.
+#+END_EXAMPLE
+
+
+
+
+---------------------------------------------------------------------
+- Solution:
+
+#+BEGIN_SRC sql
+SELECT t3.customer_id
+,c.name
+FROM (
+        (Select o.customer_id, DATEPART(MONTH,o.order_date), SUM(o.quantity*p.price)
+         FROM Orders o  
+         INNER JOIN Product p ON (o.product_id = p.product_id)  
+         GROUP BY o.customer_id, DATEPART(MONTH,o.order_date)
+         HAVING DATEPART(MONTH,o.order_date) = 6  AND SUM(o.quantity*p.price) >= 100) as t1
+       INNER JOIN
+        (Select o.customer_id, DATEPART(MONTH,o.order_date), SUM(o.quantity*p.price)
+         FROM Orders o  
+         INNER JOIN Product p ON (o.product_id = p.product_id)  
+         GROUP BY o.customer_id, DATEPART(MONTH,o.order_date)
+         HAVING DATEPART(MONTH,o.order_date) = 7  AND SUM(o.quantity*p.price) >= 100) as t2    
+         ON t1.customer_id = t2.customer_id ) t3
+
+INNER JOIN Customers c ON t3.customer_id = c.customer_id
+#+END_SRC
+
+
+
+#+BEGIN_SRC sql
+SELECT t1.customer_id
+,c.name
+FROM (
+        (Select o.customer_id, 
+         FROM Orders o  
+         INNER JOIN Product p ON (o.product_id = p.product_id)  
+         GROUP BY o.customer_id, 
+         HAVING 
+         (SUM(CASE WHEN DATEPART(MONTH,o.order_date) = 6 THEN o.quantity*p.price else 0 END) >= 100
+         AND
+          SUM(CASE WHEN DATEPART(MONTH,o.order_date) = 7 THEN o.quantity*p.price else 0 END) >= 100)
+         ) as t1
+INNER JOIN Customers c ON t1.customer_id = c.customer_id
+#+END_SRC
+
+
