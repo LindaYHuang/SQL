@@ -19,7 +19,6 @@ Write an SQL query to report the patient_id, patient_name all conditions of pati
 Return the result table in any order.
 
 The query result format is in the following example.
-
  
 #+BEGIN_EXAMPLE
 Patients
@@ -48,8 +47,7 @@ Bob and George both have a condition that starts with DIAB1.
 - Solution:
 
 #+BEGIN_SRC sql
-SELECT customer_id
-FROM Customer c 
-GROUP BY customer_id
-HAVING COUNT(DISTINCT c.product_key)  = (SELECT COUNT(*) FROM Product) 
+SELECT *
+FROM Patients
+WHERE conditions LIKE '%DIAB1%'
 #+END_SRC
