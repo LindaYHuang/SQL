@@ -64,3 +64,18 @@ with cte as(
 )
 select employee_id from cte where level<=3
 #+END_SRC
+
+#+BEGIN_SRC sql
+WITH expression_name (column_list)
+AS
+(
+    -- Anchor member
+    initial_query  
+    UNION ALL
+    -- Recursive member that references expression_name.
+    recursive_query  
+)
+-- references expression name
+SELECT *
+FROM   expression_name
+#+END_SRC
