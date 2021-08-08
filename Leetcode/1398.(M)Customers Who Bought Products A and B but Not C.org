@@ -69,30 +69,10 @@ Only the customer_id with id 3 bought the product A and B but not the product C.
 
 #+BEGIN_SRC sql
 #已验证
-with cte as(
-    select employee_id, 1 as level from Employees where manager_id = 1 and employee_id != 1
-        union all
-    select e.employee_id, level+1 as level from cte c join Employees e on e.manager_id = c.employee_id
-)
-select employee_id from cte where level<=3
+SELECT c.customer_id, c.customer_name
+FROM Customers c 
+WHERE c.customer_id IN (SELECT customer_id FROM Orders WHERE product_name = 'A')
+AND c.customer_id IN (SELECT customer_id FROM Orders WHERE product_name = 'B')
+AND c.customer_id  NOT IN (SELECT customer_id FROM Orders WHERE product_name = 'C')
 #+END_SRC
 
-#+BEGIN_SRC sql
-WITH expression_name (column_list)
-AS
-(
-    -- Anchor member
-    initial_query  
-    UNION ALL
-    -- Recursive member that references expression_name.
-    recursive_query  
-)
--- references expression name
-SELECT *
-FROM   expression_name
-#+END_SRC
-In general, a recursive CTE has three parts:
-
-1. An initial query that returns the base result set of the CTE. The initial query is called an anchor member.
-2. A recursive query that references the common table expression, therefore, it is called the recursive member. The recursive member is union-ed with the anchor member using the UNION ALL operator.
-3. A termination condition specified in the recursive member that terminates the execution of the recursive member.
