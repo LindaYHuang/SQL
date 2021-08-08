@@ -56,10 +56,11 @@ The employees with employee_id 3, 8 and 9 don't report their work to head of com
 - Solution:
 
 #+BEGIN_SRC sql
-#没验证
-SELECT activity_date AS day,
-       COUNT(DISTINCT user_id) AS active_users      
-FROM Activity 
-WHERE activity_date >= DATE_ADD('2019-07-27',INTERVAL -30 DAY)
-GROUP BY user_id
+#已验证
+with cte as(
+    select employee_id, 1 as level from Employees where manager_id = 1 and employee_id != 1
+        union all
+    select e.employee_id, level+1 as level from cte c join Employees e on e.manager_id = c.employee_id
+)
+select employee_id from cte where level<=3
 #+END_SRC
