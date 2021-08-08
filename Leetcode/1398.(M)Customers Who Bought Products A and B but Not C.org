@@ -66,6 +66,15 @@ Only the customer_id with id 3 bought the product A and B but not the product C.
 
 ---------------------------------------------------------------------
 - Solution:
+#+BEGIN_SRC sql
+#已验证
+SELECT c.customer_id, c.customer_name
+FROM Customers c
+JOIN Orders a ON a.customer_id = c.customer_id AND a.product_name = 'A'
+JOIN Orders b ON b.customer_id = c.customer_id AND b.product_name = 'B'
+LEFT OUTER JOIN Orders o on o.customer_id = c.customer_id AND o.product_name = 'C'
+WHERE o.order_id IS NULL
+#+END_SRC
 
 #+BEGIN_SRC sql
 #已验证
