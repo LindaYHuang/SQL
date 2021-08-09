@@ -105,10 +105,15 @@ John (customer 5) did not order anything, so we do not include them in the resul
 - Solution:
 #+BEGIN_SRC sql
 #已验证
-SELECT c.customer_id, c.customer_name
-FROM Customers c
-JOIN Orders a ON a.customer_id = c.customer_id AND a.product_name = 'A'
-JOIN Orders b ON b.customer_id = c.customer_id AND b.product_name = 'B'
-LEFT OUTER JOIN Orders o on o.customer_id = c.customer_id AND o.product_name = 'C'
-WHERE o.order_id IS NULL
+SELECT customer_id, product_id, product_name
+FROM (
+    SELECT O.customer_id, O.product_id, P.product_name, 
+    RANK() OVER (PARTITION BY customer_id ORDER BY COUNT(O.product_id) DESC) AS rnk
+    FROM Orders O
+    JOIN Products P
+    ON O.product_id = P.product_id  
+    GROUP BY customer_id, product_id
+) temp
+WHERE rnk = 1 
+ORDER BY customer_id, product_id
 #+END_SRC
