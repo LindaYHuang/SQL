@@ -116,4 +116,8 @@ FROM (
 ) temp
 WHERE rnk = 1 
 ORDER BY customer_id, product_id
+
+#Without the GROUP BY product_id, it will rank the count the number of product_id on each customer_id, and thus it will only return one rank (rnk=1) for each customer_id
+
+
 #+END_SRC
