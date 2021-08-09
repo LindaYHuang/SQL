@@ -43,7 +43,7 @@ Result table:
 - Solution:
 
 #+BEGIN_SRC sql
-select t1.product_id as product_id, if(isnull(t2.price), 10, t2.price) as price
+select t1.product_id as product_id, ifnull(t2.price, 10) as price
 from
        (select distinct product_id from Products) as t1 
         left join
