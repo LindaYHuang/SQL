@@ -50,20 +50,12 @@ Users 3 and 4 had 4 calls and the total duration is 999 (100 + 200 + 200 + 499).
 - Solution:
 #+BEGIN_SRC sql
 #已验证
-SELECT c.customer_id, c.customer_name
-FROM Customers c
-JOIN Orders a ON a.customer_id = c.customer_id AND a.product_name = 'A'
-JOIN Orders b ON b.customer_id = c.customer_id AND b.product_name = 'B'
-LEFT OUTER JOIN Orders o on o.customer_id = c.customer_id AND o.product_name = 'C'
-WHERE o.order_id IS NULL
+SELECT LEAST(from_id,to_id) as person1,
+        GREATEST(from_id,to_id) as person2,
+        COUNT(*) as call_count,
+        SUM(duration) as total_duration
+FROM Calls
+GROUP BY person1,person2;
 #+END_SRC
 
-#+BEGIN_SRC sql
-#已验证
-SELECT c.customer_id, c.customer_name
-FROM Customers c 
-WHERE c.customer_id IN (SELECT customer_id FROM Orders WHERE product_name = 'A')
-AND c.customer_id IN (SELECT customer_id FROM Orders WHERE product_name = 'B')
-AND c.customer_id  NOT IN (SELECT customer_id FROM Orders WHERE product_name = 'C')
-#+END_SRC
 
