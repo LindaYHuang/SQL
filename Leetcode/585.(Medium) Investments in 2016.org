@@ -46,18 +46,22 @@ So, the result is the sum of TIV_2016 of the first and last record, which is 45.
 ---------------------------------------------------------------------
 - Solution 1
 #+BEGIN_SRC sql
-SELECT SUM(TIV_2016) AS TIV_2016
+SELECT ROUND(SUM(insurance.TIV_2016),2) AS TIV_2016
 FROM insurance
-WHERE CONCAT(LAT, ',', LON)
-    IN (SELECT CONCAT(LAT, ',', LON)
-       FROM insurance
-       GROUP BY LAT, LON
-       HAVING COUNT(1) = 1)
-AND TIV_2015 IN
-    (SELECT TIV_2015
-    FROM insurance
-    GROUP BY TIV_2015
-    HAVING COUNT(1)>1)
+WHERE insurance.TIV_2015 IN -- meet the creteria #1
+    (
+       SELECT TIV_2015
+        FROM insurance
+        GROUP BY TIV_2015
+        HAVING COUNT(*) > 1
+        )
+AND CONCAT(LAT,',', LON) IN -- meet the creteria #2
+    (
+      SELECT CONCAT(LAT,',',LON) -- trick to take the LAT and LON as a pair
+      FROM insurance
+      GROUP BY LAT , LON
+      HAVING COUNT(*) = 1
+)
 #+END_SRC
 
 - Solution 2 排除法
