@@ -46,6 +46,7 @@ So, the result is the sum of TIV_2016 of the first and last record, which is 45.
 ---------------------------------------------------------------------
 - Solution 1
 #+BEGIN_SRC sql
+#已验证
 SELECT ROUND(SUM(insurance.TIV_2016),2) AS TIV_2016
 FROM insurance
 WHERE insurance.TIV_2015 IN -- meet the creteria #1
@@ -64,13 +65,4 @@ AND CONCAT(LAT,',', LON) IN -- meet the creteria #2
 )
 #+END_SRC
 
-- Solution 2 排除法
-#+BEGIN_SRC sql
-SELECT SUM(A.TIV_2016) AS TIV_2016
-FROM insurance A
-WHERE EXISTS (SELECT * FROM insurance B
-              WHERE where B.PID != A.PID and B.TIV_2015 = A.TIV_2015 )
-AND NOT EXISTS(select * from insurance as B
-    where B.PID != A.PID and B.LAT = A.LAT and B.LON = A.LON)
-#+END_SRC
 
