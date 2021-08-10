@@ -77,20 +77,16 @@ Result table:
 - Solution:
 #+BEGIN_SRC sql
 #已验证
-SELECT c.customer_id, c.customer_name
-FROM Customers c
-JOIN Orders a ON a.customer_id = c.customer_id AND a.product_name = 'A'
-JOIN Orders b ON b.customer_id = c.customer_id AND b.product_name = 'B'
-LEFT OUTER JOIN Orders o on o.customer_id = c.customer_id AND o.product_name = 'C'
-WHERE o.order_id IS NULL
+SELECT t.team_id, t.team_name, IFNULL(SUM(aa.score),0) AS num_points
+FROM Teams t
+LEFT JOIN(
+    SELECT host_team, 
+    CASE WHEN host_goals > guest_goals THEN 3 
+         WHEN host_goals = guest_goals THEN 1 
+         ELSE 0
+    END AS score
+    FROM Matches) AS aa
+ON t.team_id = aa.host_team
+GROUP BY aa.host_team, t.team_name
+ORDER BY num_points DESC, host_team ASC
 #+END_SRC
-
-#+BEGIN_SRC sql
-#已验证
-SELECT c.customer_id, c.customer_name
-FROM Customers c 
-WHERE c.customer_id IN (SELECT customer_id FROM Orders WHERE product_name = 'A')
-AND c.customer_id IN (SELECT customer_id FROM Orders WHERE product_name = 'B')
-AND c.customer_id  NOT IN (SELECT customer_id FROM Orders WHERE product_name = 'C')
-#+END_SRC
-
