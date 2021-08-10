@@ -1,0 +1,84 @@
+
+#+BEGIN_EXAMPLE
+Table: Players
++----------------+---------+
+| Column Name    | Type    |
++----------------+---------+
+| player_id      | int     |
+| player_name    | varchar |
++----------------+---------+
+player_id is the primary key for this table.
+Each row in this table contains the name and the ID of a tennis player.
+ 
+Table: Championships
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| year          | int     |
+| Wimbledon     | int     |
+| Fr_open       | int     |
+| US_open       | int     |
+| Au_open       | int     |
++---------------+---------+
+year is the primary key for this table.
+Each row of this table containts the IDs of the players who won one each tennis tournament of the grand slam.
+#+END_EXAMPLE 
+
+Write an SQL query to report the number of grand slam tournaments won by each player. Do not include the players who did not win any tournament.
+
+Return the result table in any order.
+The query result format is in the following example.
+#+BEGIN_EXAMPLE
+Players table:
++-----------+-------------+
+| player_id | player_name |
++-----------+-------------+
+| 1         | Nadal       |
+| 2         | Federer     |
+| 3         | Novak       |
++-----------+-------------+
+
+Championships table:
++------+-----------+---------+---------+---------+
+| year | Wimbledon | Fr_open | US_open | Au_open |
++------+-----------+---------+---------+---------+
+| 2018 | 1         | 1       | 1       | 1       |
+| 2019 | 1         | 1       | 2       | 2       |
+| 2020 | 2         | 1       | 2       | 2       |
++------+-----------+---------+---------+---------+
+
+Result table:
++-----------+-------------+-------------------+
+| player_id | player_name | grand_slams_count |
++-----------+-------------+-------------------+
+| 2         | Federer     | 5                 |
+| 1         | Nadal       | 7                 |
++-----------+-------------+-------------------+
+
+Player 1 (Nadal) won 7 titles: Wimbledon (2018, 2019), Fr_open (2018, 2019, 2020), US_open (2018), and Au_open (2018).
+Player 2 (Federer) won 5 titles: Wimbledon (2020), US_open (2019, 2020), and Au_open (2019, 2020).
+Player 3 (Novak) did not win anything, we did not include them in the result table.
+#+END_EXAMPLE
+
+
+---------------------------------------------------------------------
+- Solution:
+#+BEGIN_SRC sql
+#已验证
+SELECT c.customer_id, c.customer_name
+FROM Customers c
+JOIN Orders a ON a.customer_id = c.customer_id AND a.product_name = 'A'
+JOIN Orders b ON b.customer_id = c.customer_id AND b.product_name = 'B'
+LEFT OUTER JOIN Orders o on o.customer_id = c.customer_id AND o.product_name = 'C'
+WHERE o.order_id IS NULL
+#+END_SRC
+
+#+BEGIN_SRC sql
+#已验证
+SELECT c.customer_id, c.customer_name
+FROM Customers c 
+WHERE c.customer_id IN (SELECT customer_id FROM Orders WHERE product_name = 'A')
+AND c.customer_id IN (SELECT customer_id FROM Orders WHERE product_name = 'B')
+AND c.customer_id  NOT IN (SELECT customer_id FROM Orders WHERE product_name = 'C')
+#+END_SRC
+
