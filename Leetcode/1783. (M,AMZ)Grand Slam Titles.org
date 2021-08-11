@@ -65,20 +65,11 @@ Player 3 (Novak) did not win anything, we did not include them in the result tab
 - Solution:
 #+BEGIN_SRC sql
 #已验证
-SELECT c.customer_id, c.customer_name
-FROM Customers c
-JOIN Orders a ON a.customer_id = c.customer_id AND a.product_name = 'A'
-JOIN Orders b ON b.customer_id = c.customer_id AND b.product_name = 'B'
-LEFT OUTER JOIN Orders o on o.customer_id = c.customer_id AND o.product_name = 'C'
-WHERE o.order_id IS NULL
+SELECT player_id,player_name,
+SUM(player_id=Wimbledon)+SUM(player_id=Fr_open)+SUM(player_id=US_open)+SUM(player_id=Au_open)
+as grand_slams_count
+FROM Players
+JOIN Championships
+ON player_id = Wimbledon OR player_id = Fr_open OR player_id = US_open OR player_id = Au_open 
+GROUP BY player_id,player_name
 #+END_SRC
-
-#+BEGIN_SRC sql
-#已验证
-SELECT c.customer_id, c.customer_name
-FROM Customers c 
-WHERE c.customer_id IN (SELECT customer_id FROM Orders WHERE product_name = 'A')
-AND c.customer_id IN (SELECT customer_id FROM Orders WHERE product_name = 'B')
-AND c.customer_id  NOT IN (SELECT customer_id FROM Orders WHERE product_name = 'C')
-#+END_SRC
-
