@@ -1,0 +1,67 @@
+#+BEGIN_EXAMPLE
+Table: Customers
+
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| customer_id   | int     |
+| customer_name | varchar |
++---------------+---------+
+customer_id is the primary key for this table.
+Each row of this table contains the name and the id customer.
+#+END_EXAMPLE
+
+Write an SQL query to find the missing customer IDs. The missing IDs are ones that are not in the Customers table but are in the range between 1 and the maximum customer_id present in the table.
+
+Notice that the maximum customer_id will not exceed 100.
+
+Return the result table ordered by ids in ascending order.
+
+The query result format is in the following example.
+
+#+BEGIN_EXAMPLE
+Customers table:
++-------------+---------------+
+| customer_id | customer_name |
++-------------+---------------+
+| 1           | Alice         |
+| 4           | Bob           |
+| 5           | Charlie       |
++-------------+---------------+
+
+Result table:
++-----+
+| ids |
++-----+
+| 2   |
+| 3   |
++-----+
+The maximum customer_id present in the table is 5, so in the range [1,5], IDs 2 and 3 are missing from the table.
+#+END_EXAMPLE
+
+
+#+BEGIN_SRC SQL
+#  已验证
+SELECT t.project_id, t.employee_id 
+FROM 
+    (SELECT a.project_id, b.employee_id 
+    , dense_rank() over (partition by a.project_id order by b.experience_years desc) as rk
+    FROM Project a
+    JOIN Employee b ON a.employee_id = b.employee_id) as t
+WHERE t.rk = 1
+#+END_SRC
+
+
+#+BEGIN_SRC SQL
+#  已验证， mysql
+SELECT p.project_id, e.employee_id 
+FROM Project p
+JOIN Employee e 
+ON p.employee_id = e.employee_id
+WHERE (p.project_id, e.experience_years) in 
+    (select a.project_id, max(b.experience_years)
+    FROM Project a
+    LEFT JOIN Employee b
+    ON a.employee_id = b.employee_id
+    GROUP BY a.project_id)
+#+END_SRC
