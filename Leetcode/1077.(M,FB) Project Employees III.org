@@ -1,0 +1,86 @@
+#+BEGIN_EXAMPLE
+Table: Project
+
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| project_id  | int     |
+| employee_id | int     |
++-------------+---------+
+(project_id, employee_id) is the primary key of this table.
+employee_id is a foreign key to Employee table.
+Table: Employee
+
++------------------+---------+
+| Column Name      | Type    |
++------------------+---------+
+| employee_id      | int     |
+| name             | varchar |
+| experience_years | int     |
++------------------+---------+
+employee_id is the primary key of this table.
+#+END_EXAMPLE
+
+Write an SQL query that reports the most experienced employees in each project. In case of a tie, report all employees with the maximum number of experience years.
+
+The query result format is in the following example:
+
+#+BEGIN_EXAMPLE
+Project table:
++-------------+-------------+
+| project_id  | employee_id |
++-------------+-------------+
+| 1           | 1           |
+| 1           | 2           |
+| 1           | 3           |
+| 2           | 1           |
+| 2           | 4           |
++-------------+-------------+
+
+Employee table:
++-------------+--------+------------------+
+| employee_id | name   | experience_years |
++-------------+--------+------------------+
+| 1           | Khaled | 3                |
+| 2           | Ali    | 2                |
+| 3           | John   | 3                |
+| 4           | Doe    | 2                |
++-------------+--------+------------------+
+
+Result table:
++-------------+---------------+
+| project_id  | employee_id   |
++-------------+---------------+
+| 1           | 1             |
+| 1           | 3             |
+| 2           | 1             |
++-------------+---------------+
+Both employees with id 1 and 3 have the most experience among the employees of the first project. For the second project, the employee with id 1 has the most experience.
+#+END_EXAMPLE
+
+
+#+BEGIN_SRC SQL
+#  已验证
+SELECT t.project_id, t.employee_id 
+FROM 
+    (SELECT a.project_id, b.employee_id 
+    , dense_rank() over (partition by a.project_id order by b.experience_years desc) as rk
+    FROM Project a
+    JOIN Employee b ON a.employee_id = b.employee_id) as t
+WHERE t.rk = 1
+#+END_SRC
+
+
+#+BEGIN_SRC SQL
+#  已验证， mysql
+SELECT p.project_id, e.employee_id 
+FROM Project p
+JOIN Employee e 
+ON p.employee_id = e.employee_id
+WHERE (p.project_id, e.experience_years) in 
+    (select a.project_id, max(b.experience_years)
+    FROM Project a
+    LEFT JOIN Employee b
+    ON a.employee_id = b.employee_id
+    GROUP BY a.project_id)
+#+END_SRC
