@@ -1,0 +1,5 @@
+
+
+
+
+NTILE(buckets) OVER (PARTITION BY partition_expression, ... ORDER BY sort_expression [ASC | DESC], ...)
