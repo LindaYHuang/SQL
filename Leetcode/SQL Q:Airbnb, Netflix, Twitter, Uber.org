@@ -1,0 +1,44 @@
+题目：
+https://www.youtube.com/watch?v=XBE09l-UYTE
+
+
+
+Q1:
+Distance per dollar (UBER)
+
+
+考点： 
+  YYYY-MM of  'MM-DD-YYYY': CONCAT(LEFT('MM-DD-YYYY',2),RIGHT('MM-DD-YYYY',4))
+  AVG() OVER (PARTITION BY)
+
+---------------------------------------------------------------------
+- Solution:
+#+BEGIN_SRC sql
+#已验证
+  
+SELECT a.request_date
+    , ROUND(ABS(a.dis_per_dollar - a.avg_dis_per_dollar),2) as diff
+(
+  SELECT b.request_date, b.dis_per_dollar
+        , AVG(b.dis_per_dollar) OVER (PARTITION BY b.yearmonth) as avg_dis_per_dollar
+    #, ROUND(ABS((a.distance_to_travel/a.cost) - b.monthly_avg_dis_per_dollar),2) AS diff
+    #, COUNT(CASE WHEN a.request_status = 'success' THEN 1 ELSE NULL END) num_success
+    #, COUNT(CASE WHEN a.request_status = 'failed' THEN 1 ELSE NULL END) num_failed
+  FROM (
+       SELECT *
+        , CONCAT(LEFT(request_date,2),RIGHT(request_date,4)) AS yearmonth 
+        , distance_to_travel/cost AS dis_per_dollar
+       FROM table) AS b
+) as a
+GROUP BY 1#
+ORDER BY 1
+
+
+
+
+#Optimized code
+
+
+
+#+END_SRC
+
