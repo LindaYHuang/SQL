@@ -1,5 +1,29 @@
 
 
-
+考点： 
 
 NTILE(buckets) OVER (PARTITION BY partition_expression, ... ORDER BY sort_expression [ASC | DESC], ...)
+
+
+
+
+
+---------------------------------------------------------------------
+- Solution:
+#+BEGIN_SRC sql
+#已验证
+SELECT t.restaurant_id, t.sum_order_total
+FROM (
+    SELECT d.restaurant_id
+    , SUM(d.order_total) AS sum_order_total
+    , NTILE(50) OVER (ORDER BY SUM(d.order_total)) AS nt
+    FROM DoorDash_deliveries d
+    WHERE timeplace between '2021-05-01' and '2021-05-31'
+    GROUP BY d.restaurant_id
+) t
+WHERE nt = 1
+ORDER BY 2
+
+
+
+#+END_SRC
