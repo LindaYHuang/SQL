@@ -36,7 +36,8 @@ Result table:
 | 2   |
 | 3   |
 +-----+
-The maximum customer_id present in the table is 5, so in the range [1,5], IDs 2 and 3 are missing from the table.#+END_EXAMPLE
+The maximum customer_id present in the table is 5, so in the range [1,5], IDs 2 and 3 are missing from the table.
+#+END_EXAMPLE
 
 
 #+BEGIN_SRC SQL
