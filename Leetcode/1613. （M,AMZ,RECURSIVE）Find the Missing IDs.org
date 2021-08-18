@@ -40,27 +40,39 @@ The maximum customer_id present in the table is 5, so in the range [1,5], IDs 2 
 
 
 #+BEGIN_SRC SQL
+#类似题：1270
 #  已验证
-SELECT t.project_id, t.employee_id 
-FROM 
-    (SELECT a.project_id, b.employee_id 
-    , dense_rank() over (partition by a.project_id order by b.experience_years desc) as rk
-    FROM Project a
-    JOIN Employee b ON a.employee_id = b.employee_id) as t
-WHERE t.rk = 1
+WITH RECURSIVE id_seq AS (
+    SELECT 1 as continued_id
+    UNION 
+    SELECT continued_id + 1
+    FROM id_seq
+    WHERE continued_id < (SELECT MAX(customer_id) FROM Customers) 
+)
+
+SELECT continued_id AS ids
+FROM id_seq
+WHERE continued_id NOT IN (SELECT customer_id FROM Customers)  
 #+END_SRC
 
-
-#+BEGIN_SRC SQL
-#  已验证， mysql
-SELECT p.project_id, e.employee_id 
-FROM Project p
-JOIN Employee e 
-ON p.employee_id = e.employee_id
-WHERE (p.project_id, e.experience_years) in 
-    (select a.project_id, max(b.experience_years)
-    FROM Project a
-    LEFT JOIN Employee b
-    ON a.employee_id = b.employee_id
-    GROUP BY a.project_id)
+#+BEGIN_SRC sql
+WITH expression_name (column_list)
+AS
+(
+    -- Anchor member
+    initial_query  
+    UNION ALL
+    -- Recursive member that references expression_name.
+    recursive_query  
+)
+-- references expression name
+SELECT *
+FROM   expression_name
 #+END_SRC
+In general, a recursive CTE has three parts:
+
+1. An initial query that returns the base result set of the CTE. The initial query is called an anchor member.
+2. A recursive query that references the common table expression, therefore, it is called the recursive member. The recursive member is union-ed with the anchor member using the UNION ALL operator.
+3. A termination condition specified in the recursive member that terminates the execution of the recursive member.
+
+
