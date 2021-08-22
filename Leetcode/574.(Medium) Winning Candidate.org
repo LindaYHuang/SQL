@@ -40,10 +40,11 @@ there will be at most one winning candidate.
 
 -Solution
 #+BEGIN_SRC python
-Select Name from Candidate
-Where ID = (SELECT CandidateId FROM Vote 
-            GROUP BY CandidateId 
-            ORDER BY count(id) Desc
+    select c.name
+    from vote t
+    left join candidate c on c.id = t.CandidateId
+    group by t.CandidateId
+    order by count(t.id) desc limit 1nt(id) Desc
             Limit 1)
 #+END_SRC
 
