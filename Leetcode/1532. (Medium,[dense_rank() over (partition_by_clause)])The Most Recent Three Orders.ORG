@@ -85,10 +85,11 @@ We sort the result table by customer_name in ascending order, by customer_id in 
 - Solution:
 
 #+BEGIN_SRC sql
-# DENSE_RANK () OVER ( [ <partition_by_clause> ] < order_by_clause > )  
+# RANK () OVER ( [ <partition_by_clause> ] < order_by_clause > )  
 SELECT c.name customer_name, t.customer_id, t.order_id, t.order_date
 FROM 
-    (SELECT customer_id, order_id, order_date, dense_rank() over (PARTITION BY customer_id ORDER BY order_date DESC) rank
+    (SELECT customer_id, order_id, order_date
+           ,rank() over (PARTITION BY customer_id ORDER BY order_date DESC) rank
      FROM Orders) t
 LEFT JOIN Customers c on (c.customer_id = t.customer_id)
 WHERE rank <= 3
