@@ -85,8 +85,13 @@ LEFT JOIN(
          WHEN host_goals = guest_goals THEN 1 
          ELSE 0
     END AS score
-    FROM Matches) AS aa
+    FROM (
+            select * from Matches
+            union all
+            select match_id, guest_team as host_team, host_team as guest_team, guest_goals as host_goals, host_goals as guest_goals
+            from Matches ) as bb
+            ) AS aa 
 ON t.team_id = aa.host_team
-GROUP BY aa.host_team, t.team_name
-ORDER BY num_points DESC, host_team ASC
+GROUP BY aa.host_team
+ORDER BY 3 DESC, 1 ASC
 #+END_SRC
