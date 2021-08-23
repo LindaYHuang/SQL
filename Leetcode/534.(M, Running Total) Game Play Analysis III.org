@@ -47,9 +47,9 @@ Note that for each player we only care about the days when the player logged in.
 - Solution:
 
 #+BEGIN_SRC sql
-select t1.player_id, t1.event_date, sum(t2.games_played) as games_played_so_far
-from Activity as t1 LEFT JOIN Activity as t2
-on t1.player_id = t2.player_id
-where t1.event_date >= t2.event_date
-group by t1.player_id, t1.event_date
+ SELECT player_id, event_date,
+  SUM(games_played) OVER(partition by player_id ORDER BY event_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)
+          AS games_played_so_far
+  FROM Activity
+order by player_id, event_date
 #+END_SRC
