@@ -62,9 +62,9 @@ The table is ordered by the turn for simplicity.
 #+BEGIN_SRC SQL
 select aa.person_name
 from(
-    SELECT person_name, turn
+    SELECT person_name
           , sum(weight) over (order by turn) AS running_total
-        ,lead(weight,1) over (order by turn) as next_w
+          ,lead(weight,1) over (order by turn) as next_w
     From Queue
     order by turn) aa
 where aa.running_total<= 1000
