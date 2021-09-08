@@ -52,7 +52,7 @@ on t1.player_id = t2.player_id
 #+BEGIN_SRC sql
 SELECT
     ROUND(
-        COUNT(b.event_date)/ COUNT(distinct a.player_id),
+        COUNT(b.player_id)/ COUNT(distinct a.player_id),
         2) fraction
 FROM
     Activity a LEFT JOIN Activity b ON 
