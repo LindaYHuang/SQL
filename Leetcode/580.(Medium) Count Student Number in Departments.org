@@ -57,9 +57,11 @@ The Output should be:
 -Solution
 
 #+BEGIN_SRC SQL
-Select d.dept__name,
-       COUNT(distinct s.student_id) as student_number
-FROM Department d left join student s on (s.dept_id = d.dept_id )
-GROUP BY d.dept_name
-ORDER BY student_number DESC, d.dept_name
+select d.dept_name, ifnull(a.student_number,0)
+from department d
+left join (select dept_id, count(*) as student_number
+     from student 
+      group by dept_id) as a
+on d.dept_id = a.dept_id
+order by 2 desc ,1
 #+END_SRC
