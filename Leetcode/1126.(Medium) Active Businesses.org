@@ -47,10 +47,8 @@ Business with id 1 has 7 'reviews' events (more than 5) and 11 'ads' events (mor
 #+BEGIN_SRC sql
 
 SELECT t1.business_id
-FROM (SELECT business_id, event_type, occurences
-      FROM Events
-      GROUP BY business_id, event_type) as t1 
-    LEFT JOIN  
+FROM Events t1 
+JOIN  
       (SELECT event_type, avg(occurences) as avgo
        FROM Events
        GROUP BY event_type) as t2
