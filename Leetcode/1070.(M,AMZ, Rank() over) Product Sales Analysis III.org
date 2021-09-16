@@ -59,23 +59,23 @@ Result table:
 ---------------------------------------------------------------------
 - Solution:
 #+BEGIN_SRC sql
-#已验证
-select a.product_id, a.year as first_year, a.quantity, a.price
-from (select *,
-     rank() over (partition by product_id order by year) as rkk
-     from sales) a
-where rkk = 1
-#+END_SRC
-
-#+BEGIN_SRC sql
-#there may be more than 1 first year
-SELECT product_id, 
-       year AS first_year,
-       quantity,
-       price       
-FROM sales s
-WHERE (s.product_id, s.year) IN 
-      (SELEC product_id, min(year) 
-       FROM sales
-       GROUP BY product_id)
+(select u.name as results
+from users u
+join (select user_id,count(rating) as num_r
+     from Movie_Rating
+     group by user_id) as m
+on m.user_id = u.user_id
+order by m.num_r desc, u.name 
+limit 1)
+union
+(select mm.title as results
+from movies mm
+join (select movie_id,
+     avg(rating) as avg_r
+     from Movie_Rating
+     where left(created_at,7) = '2020-02'
+     group by movie_id )as x
+on mm.movie_id = x.movie_id
+order by x.avg_r desc, mm.title 
+limit 1)
 #+END_SRC
