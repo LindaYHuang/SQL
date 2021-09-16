@@ -1,4 +1,4 @@
-Table: Sales
+
 #+BEGIN_EXAMPLE
 Table: Movies
 
