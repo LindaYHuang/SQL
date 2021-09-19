@@ -56,9 +56,9 @@ Day 2020-05-04, 15 apples and 16 oranges were sold (Difference 15 - 16 = -1).
 - Solution:
 
 #+BEGIN_SRC sql
-SELECT a.sale_date, (sold_num-sold_num_o)as diff
-FROM (
-(SELECT * FROM SALES WHERE fruit = 'apples') a
-inner join 
-(SELECT sold_num as sold_num_o FROM SALES WHERE fruit = 'oranges') b on a.sale_date = b.sale_date)
+select distinct sale_date,
+ifnull(sum(case when fruit = 'apples' then sold_num else -sold_num end),0)as diff 
+from Sales
+group by sale_date
+order by 1
 #+END_SRC
