@@ -70,19 +70,12 @@ As shown, you need find the value of each boolean exprssion in the table using t
 - Solution:
 
 #+BEGIN_SRC sql
-SELECT t.left_operand,t.operator,t.right_operand,
-(Case 
-    WHEN t.l_value > R_value AND t.operator = '>' then "true"
-    WHEN t.l_value = R_value AND t.operator = '=' then "true"
-    WHEN t.l_value < R_value AND t.operator = '<' then "true"
-    else "false"
-END) as value
-From (SELECT E.*, V1.value as l_value, V2.value as R_value
-      FROM Expressions E 
-      INNER Join Variables V1 on E.left_operand = V1.name
-      INNER Join Variables V2 on E.right_operand = V2.name)  t
-
-
-
-
+select e.*,
+case when e.operator = '>' and v1.value > v2.value then "true"
+    when e.operator = '=' and v1.value = v2.value then "true"
+    when e.operator = '<' and v1.value < v2.value then "true"
+    else "false" end as value
+from Expressions e
+join Variables v1 on v1.name = e.left_operand
+join Variables v2 on v2.name = e.right_operand
 #+END_SRC
