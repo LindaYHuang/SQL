@@ -1,13 +1,5 @@
-### [2084\. Drop Type 1 Orders for Customers With Type 0 Orders](https://leetcode.com/problems/drop-type-1-orders-for-customers-with-type-0-orders/)
-
-Difficulty: **Medium**  
-
-Related Topics: [Database](https://leetcode.com/tag/database/)
-
-
+#+BEGIN_EXAMPLE
 Table: `Orders`
-
-```
 +-------------+------+
 | Column Name | Type |
 +-------------+------+
@@ -18,7 +10,7 @@ Table: `Orders`
 order_id is the primary key column for this table.
 Each row of this table indicates the ID of an order, the ID of the customer who ordered it, and the order type.
 The orders could be of type 0 or type 1.
-```
+#+END_EXAMPLE
 
 Write an SQL query to report all the orders based on the following criteria:
 
@@ -28,10 +20,8 @@ Write an SQL query to report all the orders based on the following criteria:
 Return the result table in **any order**.
 
 The query result format is in the following example.
-
+#+BEGIN_EXAMPLE
 **Example 1:**
-
-```
 Input: 
 Orders table:
 +----------+-------------+------------+
@@ -62,23 +52,24 @@ Customer 1 has two orders of type 0\. We return both of them.
 Customer 2 has one order of type 0 and one order of type 1\. We only return the order of type 0.
 Customer 3 has one order of type 0 and one order of type 1\. We only return the order of type 0.
 Customer 4 has two orders of type 1\. We return both of them.
-```
+#+END_EXAMPLE
+
+---------------------------------------------------------------------
+- Solution:
+#+BEGIN_SRC sql
+#已验证
+WITH cte AS (
+SELECT bus_id, arrival_time,
+LAG(arrival_time,1,0) OVER (ORDER BY arrival_time) min_time
+FROM buses
+)
 
 
-#### Solution
+SELECT cte.bus_id, COUNT(passenger_id) AS passengers_cnt
+FROM cte
+LEFT JOIN passengers p
+ON p.arrival_time > cte.min_time AND p.arrival_time <= cte.arrival_time
+GROUP BY 1
+ORDER BY 1;
 
-Language: **MySQL**
-
-```mysql
-# Write your MySQL query statement below
-select * 
-from Orders
-where (customer_id, order_type) not in
-(
-select customer_id, order_type
-from Orders
-group by customer_id
-having )
-​
-​
-```
+#+END_SRC
