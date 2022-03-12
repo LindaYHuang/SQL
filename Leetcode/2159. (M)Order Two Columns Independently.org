@@ -1,0 +1,60 @@
+
+#+BEGIN_EXAMPLE
+Table: Data
+
++-------------+------+
+| Column Name | Type |
++-------------+------+
+| first_col   | int  |
+| second_col  | int  |
++-------------+------+
+There is no primary key for this table and it may contain duplicates.
+#+END_EXAMPLE 
+
+Write an SQL query to independently:
+
+order first_col in ascending order.
+order second_col in descending order.
+The query result format is in the following example.
+
+#+BEGIN_EXAMPLE
+
+Example 1:
+
+Input: 
+Data table:
++-----------+------------+
+| first_col | second_col |
++-----------+------------+
+| 4         | 2          |
+| 2         | 3          |
+| 3         | 1          |
+| 1         | 4          |
++-----------+------------+
+Output: 
++-----------+------------+
+| first_col | second_col |
++-----------+------------+
+| 1         | 4          |
+| 2         | 3          |
+| 3         | 2          |
+| 4         | 1          |
++-----------+------------+
+#+END_EXAMPLE
+The head of the company is the employee with employee_id 1.
+The employees with employee_id 2 and 77 report their work directly to the head of the company.
+The employee with employee_id 4 report his work indirectly to the head of the company 4 --> 2 --> 1. 
+The employee with employee_id 7 report his work indirectly to the head of the company 7 --> 4 --> 2 --> 1.
+The employees with employee_id 3, 8 and 9 don't report their work to head of company directly or indirectly. 
+
+
+---------------------------------------------------------------------
+- Solution:
+
+#+BEGIN_SRC sql
+select m1.first_col,m2.second_col 
+from (select first_col,row_number() over (order by first_col) as r1 from data) m1
+join
+ (select second_col,row_number() over (order by second_col desc) as r2 from data) m2
+ on m1.r1 = m2.r2
+#+END_SRC
