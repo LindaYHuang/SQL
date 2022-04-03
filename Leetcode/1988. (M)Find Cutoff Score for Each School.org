@@ -79,9 +79,9 @@ Explanation:
 - Solution:
 #+BEGIN_SRC sql
 #已验证
-select s.school_id, ifnull(min(e.score),-1) as score
+select s.school_id, ISNULL(min(e.score),-1) as score
 from Schools s
 left join exam e 
 on s.capacity > e.student_count
-group by 1
+group by s.school_id
 #+END_SRC
