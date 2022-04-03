@@ -51,7 +51,7 @@ Note that we do not have any information about the users that follow users 3, 4,
 ---------------------------------------------------------------------
 - Solution:
 #+BEGIN_SRC sql
-#已验证
+#已验证   MySQL
 select r1.user_id as user1_id, r2.user_id as user2_id 
 from Relations r1
 join Relations r2
