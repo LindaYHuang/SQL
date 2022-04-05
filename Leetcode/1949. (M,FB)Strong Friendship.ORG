@@ -69,6 +69,7 @@ from cte f1
 join cte f2
 on f1.user2_id = f2.user2_id  # common friends
 and f1.user1_id < f2.user1_id 
+where (f1.user1_id,f2.user1_id) in (select * from friendship) 
 group by 1,2
 having count(f1.user1_id)>=3
 #+END_SRC
