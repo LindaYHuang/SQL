@@ -73,6 +73,19 @@ User 2 made 2 requests where one was confirmed and the other timed out. The conf
 #+END_EXAMPLE
 
 ---------------------------------------------------------------------
+
+#+BEGIN_SRC SQL
+SELECT a.user_id
+, ROUND(AVG(CASE WHEN b.action = 'confirmed' THEN 1.00 ELSE 0.00 END),2) AS confirmation_rate
+FROM Signups a
+LEFT JOIN  Confirmations b 
+ON a.user_id = b.user_id
+GROUP BY a.user_id
+#+END_SRC
+
+
+
+
 #+BEGIN_SRC SQL
 select distinct a.user_id
        , ROUND(ifnull(b.r,0),2) AS confirmation_rate
