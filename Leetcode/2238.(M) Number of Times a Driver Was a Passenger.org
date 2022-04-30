@@ -54,8 +54,9 @@ The driver with ID = 11 was never a passenger.
 #+END_EXAMPLE
 
 
-#### Solution
 
+---------------------------------------------------------------------
+- Solution:
 Language: **MySQL**
 
 #+BEGIN_SRC sql
