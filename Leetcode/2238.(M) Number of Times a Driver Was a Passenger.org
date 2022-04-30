@@ -5,9 +5,8 @@ Difficulty: **Medium**
 Related Topics: [Database](https://leetcode.com/tag/database/)
 
 
-Table: `Rides`
-
-```
+Table: Rides
+#+BEGIN_EXAMPLE
 +--------------+------+
 | Column Name  | Type |
 +--------------+------+
@@ -18,7 +17,7 @@ Table: `Rides`
 ride_id is the primary key for this table.
 Each row of this table contains the ID of the driver and the ID of the passenger that rode in ride_id.
 Note that driver_id != passenger_id.
-```
+#+END_EXAMPLE
 
 Write an SQL query to report the ID of each driver and the number of times they were a passenger.
 
@@ -28,7 +27,7 @@ The query result format is in the following example.
 
 **Example 1:**
 
-```
+#+BEGIN_EXAMPLE
 Input: 
 Rides table:
 +---------+-----------+--------------+
@@ -52,14 +51,14 @@ Explanation:
 There are two drivers in all the given rides: 7 and 11.
 The driver with ID = 7 was a passenger two times.
 The driver with ID = 11 was never a passenger.
-```
+#+END_EXAMPLE
 
 
 #### Solution
 
 Language: **MySQL**
 
-```mysql
+#+BEGIN_SRC sql
 # Write your MySQL query statement below
 SELECT DISTINCT r.driver_id,
 ifnull(t.cnt,0) as cnt
@@ -69,5 +68,4 @@ LEFT JOIN
     FROM Rides
     GROUP BY passenger_id) t
 ON t.passenger_id = r.driver_id
-​
-```
+#+END_SRC 
