@@ -69,4 +69,15 @@ LEFT JOIN
     FROM Rides
     GROUP BY passenger_id) t
 ON t.passenger_id = r.driver_id
+
+
+
+#solution 2: self join 原理和上面一样
+SELECT r.driver_id,
+ifnull(count(distinct r2.ride_id),0) as cnt
+FROM Rides r
+LEFT JOIN  Rides r2 
+ON r2.passenger_id = r.driver_id
+GROUP BY r.driver_id
+
 #+END_SRC 
