@@ -56,4 +56,6 @@ from (select transaction_id,
     from transactions) as t
 where t.rkk = 1
 order by 1
+
+# DATE_FORMAT(day, "%Y-%m-%d")    可以替换 left(day,10)
 #+END_SRC
